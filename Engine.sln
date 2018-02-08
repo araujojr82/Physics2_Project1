@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2006
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{FB5E187A-63F8-4864-946A-187E7F295638}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysicsInterfaces", "PhysicsInterfaces\PhysicsInterfaces.vcxproj", "{520130CC-8758-4776-9DA5-40D421D0D4B8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysicsLibrary", "PhysicsLibrary\PhysicsLibrary.vcxproj", "{5808DFFF-3FD4-437A-A129-F8DE3390B41B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,22 @@ Global
 		{FB5E187A-63F8-4864-946A-187E7F295638}.Release|x64.Build.0 = Release|x64
 		{FB5E187A-63F8-4864-946A-187E7F295638}.Release|x86.ActiveCfg = Release|Win32
 		{FB5E187A-63F8-4864-946A-187E7F295638}.Release|x86.Build.0 = Release|Win32
+		{520130CC-8758-4776-9DA5-40D421D0D4B8}.Debug|x64.ActiveCfg = Debug|x64
+		{520130CC-8758-4776-9DA5-40D421D0D4B8}.Debug|x64.Build.0 = Debug|x64
+		{520130CC-8758-4776-9DA5-40D421D0D4B8}.Debug|x86.ActiveCfg = Debug|Win32
+		{520130CC-8758-4776-9DA5-40D421D0D4B8}.Debug|x86.Build.0 = Debug|Win32
+		{520130CC-8758-4776-9DA5-40D421D0D4B8}.Release|x64.ActiveCfg = Release|x64
+		{520130CC-8758-4776-9DA5-40D421D0D4B8}.Release|x64.Build.0 = Release|x64
+		{520130CC-8758-4776-9DA5-40D421D0D4B8}.Release|x86.ActiveCfg = Release|Win32
+		{520130CC-8758-4776-9DA5-40D421D0D4B8}.Release|x86.Build.0 = Release|Win32
+		{5808DFFF-3FD4-437A-A129-F8DE3390B41B}.Debug|x64.ActiveCfg = Debug|x64
+		{5808DFFF-3FD4-437A-A129-F8DE3390B41B}.Debug|x64.Build.0 = Debug|x64
+		{5808DFFF-3FD4-437A-A129-F8DE3390B41B}.Debug|x86.ActiveCfg = Debug|Win32
+		{5808DFFF-3FD4-437A-A129-F8DE3390B41B}.Debug|x86.Build.0 = Debug|Win32
+		{5808DFFF-3FD4-437A-A129-F8DE3390B41B}.Release|x64.ActiveCfg = Release|x64
+		{5808DFFF-3FD4-437A-A129-F8DE3390B41B}.Release|x64.Build.0 = Release|x64
+		{5808DFFF-3FD4-437A-A129-F8DE3390B41B}.Release|x86.ActiveCfg = Release|Win32
+		{5808DFFF-3FD4-437A-A129-F8DE3390B41B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

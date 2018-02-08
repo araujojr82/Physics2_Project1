@@ -175,10 +175,19 @@ int main( void )
 	glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 2 );
 	glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 0 );
 
-	window = glfwCreateWindow( wConfig.width, wConfig.height,
-		wConfig.title.c_str(),		
-		glfwGetPrimaryMonitor(), ////NULL, 
-		NULL );
+	#ifdef NDEBUG				// nondebug
+		window = glfwCreateWindow( wConfig.width, wConfig.height,
+			wConfig.title.c_str(),
+			glfwGetPrimaryMonitor(),	// Runs in full screen
+			NULL );
+	#else						// debug code
+		window = glfwCreateWindow( wConfig.width, wConfig.height,
+			wConfig.title.c_str(),
+			NULL, 
+			NULL );
+	#endif
+
+
 	if( !window )
 	{
 		glfwTerminate();
@@ -430,7 +439,7 @@ int main( void )
 		ProcessCameraInput( window, deltaTime );
 
 		// Physics Calculation
-		//PhysicsStep( deltaTime );
+		PhysicsStep( deltaTime );
 		
 		lastTimeStep = curTime;
 
@@ -725,7 +734,7 @@ void PhysicsStep( double deltaTime )
 	glm::vec3 triangleNormal = glm::vec3( 0.0f );
 
 	// NO GRAVITY
-	const glm::vec3 GRAVITY = glm::vec3( 0.0f, 0.0f, -0.1f );
+	const glm::vec3 GRAVITY = glm::vec3( 0.0f, 0.0f, -1.1f );
 	//const glm::vec3 GRAVITY = glm::vec3( 0.0f, 0.0f, 0.0f );
 
 	// Identical to the 'render' (drawing) loop
@@ -823,6 +832,7 @@ void PhysicsStep( double deltaTime )
 
 		// Calculate the normal using the center as reference
 		glm::vec3 velEndPoint = pCurGO->vel + pCurGO->position;
+		glm::vec3 velBeginPoint = ( glm::normalize( pCurGO->vel ) * glm::vec3( pCurGO->radius, pCurGO->radius, pCurGO->radius ) );
 		glm::vec3 color = glm::vec3( 1.0f, 1.0f, 1.0f );
 
 		::g_pDebugRenderer->addLine( pCurGO->position, velEndPoint, color, false );
