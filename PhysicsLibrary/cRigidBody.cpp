@@ -30,7 +30,7 @@ namespace nPhysics
 		transformOut[3][2] = mPosition.z;
 		transformOut[3][3] = 1.f;
 	}
-	void cRigidBody::GetPostion(glm::vec3& positionOut)
+	void cRigidBody::GetPosition(glm::vec3& positionOut)
 	{
 		positionOut = mPosition;
 	}
@@ -38,4 +38,48 @@ namespace nPhysics
 	{
 		rotationOut = glm::eulerAngles(mRotation);
 	}
+
+	void cRigidBody::SetTransform( glm::mat4 transformIn )
+	{
+		/*transformOut = glm::mat4_cast( mRotation );
+		transformOut[3][0] = mPosition.x;
+		transformOut[3][1] = mPosition.y;
+		transformOut[3][2] = mPosition.z;
+		transformOut[3][3] = 1.f;*/
+	}
+
+	void cRigidBody::SetPosition( glm::vec3 positionIn )
+	{
+		mPosition = positionIn;
+	}
+
+	void cRigidBody::SetRotation( glm::vec3 rotationIn )
+	{
+		mRotation = rotationIn;
+		// glm::angleAxis( Euler angles )?
+	}
+
+	void cRigidBody::ApplyForce( glm::vec3 force )
+	{
+		mAcceleration += force * mInvMass;
+		
+	}
+
+	void cRigidBody::ApplyForceAtPoint( glm::vec3 force, glm::vec3 velocity )
+	{
+		
+	}
+
+
+	void cRigidBody::ApplyImpulse( glm::vec3 impulse )
+	{
+		mVelocity += impulse * mInvMass;
+	}
+
+	void cRigidBody::ApplyImpulseAtPoint( glm::vec3 impulse, glm::vec3 relativePoint )
+	{
+		mVelocity += impulse * mInvMass;
+		mAngularVelocity += glm::cross( relativePoint, impulse * mInvMass );
+	}
+
 }

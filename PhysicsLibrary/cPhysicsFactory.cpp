@@ -1,6 +1,12 @@
 #include "cPhysicsFactory.h"
 #include "cRigidBody.h"
+#include "cPhysicsWorld.h"
 #include "shapes.h"
+
+EXTERN_DLL_EXPORT nPhysics::iPhysicsFactory* CreateFactory()
+{
+	return new nPhysics::cPhysicsFactory();
+}
 
 namespace nPhysics
 {
@@ -8,7 +14,7 @@ namespace nPhysics
 
 	iPhysicsWorld* cPhysicsFactory::CreateWorld()
 	{
-		return NULL;
+		return new cPhysicsWorld();
 	}
 
 	iRigidBody* cPhysicsFactory::CreateRigidBody(const sRigidBodyDesc& desc, iShape* shape)

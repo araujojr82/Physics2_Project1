@@ -77,8 +77,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(IncludePath);$(SourcePath)include;</IncludePath>
-    <LibraryPath>$(SourcePath)lib\Debug64;$(SolutionDir)x64\Debug\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath);$(SourcePath)include;$(SolutionDir)PhysicsInterfaces</IncludePath>
+    <SourcePath>$(SolutionDir)PhysicsInterfaces;$(SourcePath)</SourcePath>
+    <LibraryPath>$(SourcePath)lib\Debug64;$(SolutionDir)x64\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -115,7 +116,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3_64.lib;PhysicsLibrary.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3_64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
