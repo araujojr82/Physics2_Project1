@@ -160,7 +160,6 @@
     <ClCompile Include="cLightManager.cpp" />
     <ClCompile Include="cMesh.cpp" />
     <ClCompile Include="cMouseCamera.h" />
-    <ClCompile Include="cRandomMap.cpp" />
     <ClCompile Include="cShader.cpp" />
     <ClCompile Include="cShaderManager.cpp" />
     <ClCompile Include="cTriangle.cpp" />
@@ -171,7 +170,6 @@
     </ClCompile>
     <ClCompile Include="cVAOMeshManager.cpp" />
     <ClCompile Include="Physics.cpp" />
-    <ClCompile Include="MapUtilities.cpp" />
     <ClCompile Include="Physics\AABB_triangles.cpp" />
     <ClCompile Include="Physics\cAABBBroadPhase.cpp" />
     <ClCompile Include="Physics\cAABBv2.cpp" />
@@ -190,11 +188,9 @@
     <ClInclude Include="cShaderManager.h" />
     <ClInclude Include="cTriangle.h" />
     <ClInclude Include="cVAOMeshManager.h" />
-    <ClInclude Include="cRandomMap.h" />
     <ClInclude Include="globalGameStuff.h" />
     <ClInclude Include="globalOpenGL_GLFW.h" />
     <ClInclude Include="iDebugRenderer.h" />
-    <ClInclude Include="MapUtilities.h" />
     <ClInclude Include="ModelUtilities.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Physics\AABB_triangles.h" />

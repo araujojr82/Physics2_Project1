@@ -18,6 +18,7 @@
 #include <string>
 #include <vector>						// smart array, "array" in most languages
 #include <random>
+#include <time.h>
 
 #include "Utilities.h"
 #include "ModelUtilities.h"
@@ -30,8 +31,6 @@
 
 #include "cLightManager.h"
 
-#include "cRandomMap.h"
-#include "MapUtilities.h"
 
 // Include all the things that are accessed in other files
 #include "globalGameStuff.h"
@@ -126,12 +125,11 @@ sMeshparameters parseMeshLine( std::ifstream &source );
 void loadMeshesFile( std::string fileName, GLint ShaderID );
 void loadLightObjects();
 void PhysicsStep( double deltaTime );
-void newMapObject( int shaderID );
 void DrawObject( cGameObject* pTheGO );
 float generateRandomNumber( float min, float max );
 void mouse_callback( GLFWwindow* window, double xpos, double ypos );
 void scroll_callback( GLFWwindow* window, double xoffset, double yoffset );
-void processInput( GLFWwindow *window, double deltaTime );
+void ProcessCameraInput( GLFWwindow *window, double deltaTime );
 
 void DrawRenderStuff( glm::mat4 view, glm::mat4 projection )
 {
@@ -152,92 +150,6 @@ void DrawRenderStuff( glm::mat4 view, glm::mat4 projection )
 			::g_pDebugRenderer->addLine( center, radiusEnd, color, false );
 		}
 	}
-
-	//cAABBv2 *ptheAABB;
-	//for( itAABB = ::g_terrainAABBBroadPhase->mapIDToAABB.begin(); itAABB != g_terrainAABBBroadPhase->mapIDToAABB.end(); itAABB++ )
-	//{
-	//	glm::vec3 color;
-	//	ptheAABB = itAABB->second;
-
-	//	cGameObject* pTheBall = findObjectByFriendlyName( THEBALLNAME, ::g_vecGameObjects );
-	//	unsigned long long ballID = cAABBv2::calculateID( pTheBall->position );
-
-	//	if( ptheAABB->getID() == ballID )
-	//	{
-	//		color = glm::vec3( 1.0f, 0.0f, 0.0f );
-	//	}
-	//	else
-	//	{
-	//		color = glm::vec3( 0.6f, 0.5f, 1.0f );
-	//	}
-
-	//	if( ptheAABB->getID() == ballID )
-	//	{
-	//		glm::vec3 point1 = glm::vec3( ptheAABB->minXYZ.x, ptheAABB->minXYZ.y, ptheAABB->minXYZ.z );
-	//		glm::vec3 point2 = glm::vec3( ptheAABB->minXYZ.x, ptheAABB->maxXYZ.y, ptheAABB->minXYZ.z );
-	//		glm::vec3 point3 = glm::vec3( ptheAABB->maxXYZ.x, ptheAABB->maxXYZ.y, ptheAABB->minXYZ.z );
-	//		glm::vec3 point4 = glm::vec3( ptheAABB->maxXYZ.x, ptheAABB->minXYZ.y, ptheAABB->minXYZ.z );
-
-	//		glm::vec3 point5 = glm::vec3( ptheAABB->minXYZ.x, ptheAABB->minXYZ.y, ptheAABB->maxXYZ.z );
-	//		glm::vec3 point6 = glm::vec3( ptheAABB->minXYZ.x, ptheAABB->maxXYZ.y, ptheAABB->maxXYZ.z );
-	//		glm::vec3 point7 = glm::vec3( ptheAABB->maxXYZ.x, ptheAABB->maxXYZ.y, ptheAABB->maxXYZ.z );
-	//		glm::vec3 point8 = glm::vec3( ptheAABB->maxXYZ.x, ptheAABB->minXYZ.y, ptheAABB->maxXYZ.z );
-
-	//		//ADD 12 lines to form a cube on the AABB
-	//		// Botton Square
-	//		::g_pDebugRenderer->addLine( point1, point2, color, false );
-	//		::g_pDebugRenderer->addLine( point2, point3, color, false );
-	//		::g_pDebugRenderer->addLine( point3, point4, color, false );
-	//		::g_pDebugRenderer->addLine( point4, point1, color, false );
-
-	//		// 4 "pillars
-	//		::g_pDebugRenderer->addLine( point1, point5, color, false );
-	//		::g_pDebugRenderer->addLine( point2, point6, color, false );
-	//		::g_pDebugRenderer->addLine( point3, point7, color, false );
-	//		::g_pDebugRenderer->addLine( point4, point8, color, false );
-
-	//		// Top Square
-	//		::g_pDebugRenderer->addLine( point5, point6, color, false );
-	//		::g_pDebugRenderer->addLine( point6, point7, color, false );
-	//		::g_pDebugRenderer->addLine( point7, point8, color, false );
-	//		::g_pDebugRenderer->addLine( point8, point5, color, false );
-
-	//		// Loop the triangles in the Bounding Box and draw them
-	//		for( int t = 0; t != ptheAABB->vecTriangles.size(); t++ )
-	//		//for( int t = 0; t != 1; t++ )
-	//		{
-	//			color = glm::vec3( 1.0f, 1.0f, 0.0f );
-	//			
-	//			// Draw the triangle
-	//			::g_pDebugRenderer->addTriangle( ptheAABB->vecTriangles[t].verts[0],
-	//											 ptheAABB->vecTriangles[t].verts[1],
-	//											 ptheAABB->vecTriangles[t].verts[2],
-	//											 color, 
-	//											 false );
-	//			
-	//			{// Draw the normal of the triangle
-	//				// Get the triangle center point
-	//				glm::vec3 centerPoint = ptheAABB->vecTriangles[t].calcCentre();
-
-	//				// Get the triangle's vertices 
-	//				glm::vec3 thePoints[3];
-	//				thePoints[0] = ptheAABB->vecTriangles[t].verts[0];
-	//				thePoints[1] = ptheAABB->vecTriangles[t].verts[1];
-	//				thePoints[2] = ptheAABB->vecTriangles[t].verts[2];
-
-	//				// Calculate the normal using the center as reference
-	//				glm::vec3 normalEndPoint = returnNormal2( thePoints, centerPoint );
-
-	//				//
-	//				float length = glm::distance( centerPoint, normalEndPoint );
-	//				
-	//				color = glm::vec3( 1.0f, 0.0f, 1.0f );
-	//				::g_pDebugRenderer->addLine( centerPoint, normalEndPoint, color, false );
-	//			}
-	//		}				
-	//	}
-	//}
-
 	::g_pDebugRenderer->RenderDebugObjects( view, projection );
 }
 
@@ -253,17 +165,6 @@ int main( void )
 	GLint mvp_location; //vpos_location, vcol_location;
 	glfwSetErrorCallback( error_callback );
 
-	//// Other uniforms:
-	//GLint uniLoc_materialDiffuse = -1;
-	//GLint uniLoc_materialAmbient = -1;
-	//GLint uniLoc_ambientToDiffuseRatio = -1; 	// Maybe	// 0.2 or 0.3
-	//GLint uniLoc_materialSpecular = -1;  // rgb = colour of HIGHLIGHT only
-	//									 // w = shininess of the 
-	//GLint uniLoc_eyePosition = -1;	// Camera position
-	//GLint uniLoc_mModel = -1;
-	//GLint uniLoc_mView = -1;
-	//GLint uniLoc_mProjection = -1;
-
 	if( !glfwInit() )
 		exit( EXIT_FAILURE );
 
@@ -275,8 +176,8 @@ int main( void )
 	glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 0 );
 
 	window = glfwCreateWindow( wConfig.width, wConfig.height,
-		wConfig.title.c_str(),
-		NULL, // glfwGetPrimaryMonitor(), //
+		wConfig.title.c_str(),		
+		glfwGetPrimaryMonitor(), ////NULL, 
 		NULL );
 	if( !window )
 	{
@@ -383,25 +284,9 @@ int main( void )
 	}
 	::g_pTextureManager->Create2DTextureFromBMPFile( "Rough_rock_015_COLOR.bmp", true );
 	::g_pTextureManager->Create2DTextureFromBMPFile( "Red_Marble_001_COLOR.bmp", true );
-
-	// THE AABB GENERATION --------------------------
-
-	//// About the generate the AABB for the terrain
-	//::g_terrainAABBBroadPhase = new cAABBBroadPhase();
-	//// Perhaps you'd like something more sophisticated than this...
-	//::g_terrainAABBBroadPhase->pDebugRenderer = ::g_pDebugRenderer;
 	
 	cMesh terrainMesh;
 	
-	//if( ::g_pVAOManager->lookupMeshFromName( "map", terrainMesh ) )
-	//{
-	//	std::cout << "Generating the terrain AABB grid. This will take a moment..." << std::endl;
-
-	//	::g_terrainAABBBroadPhase->genAABBGridFromMesh( terrainMesh );
-
-	//}
-	// END OF THE AABB GENERATION -------------------
-
 	//::g_pTheMouseCamera = new cMouseCamera( glm::vec3( 5.0f, 5.0f, 3.0f ) );
 	//::g_pTheMouseCamera = new cMouseCamera( glm::vec3( 5.0f, 5.0f, 3.0f ), glm::vec3( 0.0f, 0.0f, 1.0f ), -90.f, 0.f );
 	::g_pTheMouseCamera = new cMouseCamera( glm::vec3( 4.0f, 4.0f, 4.0f ), glm::vec3( 0.0f, 0.0f, 1.0f ), -135.f, -32.f );
@@ -439,9 +324,7 @@ int main( void )
 
 		// Clear colour AND depth buffer
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-		//glEnable(GL_DEPTH_TEST);
-
-		//        glUseProgram(program);
+		
 		::g_pShaderManager->useShaderProgram( "mySexyShader" );
 		GLint shaderID = ::g_pShaderManager->getIDFromFriendlyName( "mySexyShader" );
 
@@ -460,7 +343,6 @@ int main( void )
 		glm::mat4 matView = glm::mat4( 1.0f );	// was "v"
 
 		// Now the view matrix is taken right from the camera class
-		//matView = ::g_pTheCamera->getViewMatrix();		
 		matView = ::g_pTheMouseCamera->GetViewMatrix();
 
 		glUniformMatrix4fv( uniLoc_mView, 1, GL_FALSE,
@@ -532,15 +414,7 @@ int main( void )
 		std::map< unsigned long long, cAABBv2* >::iterator itAABB;
 
 		std::stringstream ssTitle;
-		ssTitle << "Physics 2 ";
-			//<< "Camera Eye(xyz): "
-			//<< ::g_pTheCamera->eye.x << ", "
-			//<< ::g_pTheCamera->eye.y << ", "
-			//<< ::g_pTheCamera->eye.z
-			//<< "/ Camera Target(xyz): "
-			//<< ::g_pTheCamera->target.x << ", "
-			//<< ::g_pTheCamera->target.y << ", "
-			//<< ::g_pTheCamera->target.z;
+		ssTitle << "Physics 2: Project 1";
 
 		glfwSetWindowTitle( window, ssTitle.str().c_str() );
 
@@ -553,15 +427,11 @@ int main( void )
 		double deltaTime = curTime - lastTimeStep;
 
 		// Update camera
-		processInput( window, deltaTime );
+		ProcessCameraInput( window, deltaTime );
 
 		// Physics Calculation
 		//PhysicsStep( deltaTime );
-
-		//// Update camera, too
-		//::g_pTheCamera->updateTick( deltaTime );
-		//::g_pTheCamera->accel = glm::vec3( 0.0f, 0.0f, 0.0f );
-
+		
 		lastTimeStep = curTime;
 
 	}// while ( ! glfwWindowShouldClose(window) )
@@ -622,7 +492,10 @@ void loadConfigFile( std::string fileName, sWindowConfig& wConfig )
 float generateRandomNumber( float min, float max )
 {
 
-	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	time_t curTime;
+	time( &curTime );
+
+	unsigned int seed = (int)time;
 
 	std::default_random_engine generator( seed );
 	std::uniform_real_distribution<float> distribution( min, max );
@@ -659,90 +532,6 @@ glm::vec3 GetRandomPosition()
 	}
 
 	return newPosition;
-}
-
-void newMapObject( int shaderID )
-{
-	cMesh mapMesh = createMap( shaderID );
-
-	if( !::g_pVAOManager->loadMeshIntoVAO( mapMesh, shaderID, true ) )
-	{
-		std::cout << "Could not load mesh into VAO" << std::endl;
-	}
-
-	// Create a new GO
-	cGameObject* pTempGO = new cGameObject();
-
-	pTempGO->meshName = "map";
-	pTempGO->diffuseColour = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f );
-
-	pTempGO->position = glm::vec3( 0.0f );
-	pTempGO->scale = 1.0f;
-	pTempGO->overwrtiteQOrientationFormEuler( glm::vec3( 0.0f, 0.0f, 0.0f ) );
-	pTempGO->vel = glm::vec3( 0.0f );
-	pTempGO->typeOfObject = AABB;
-	pTempGO->bIsUpdatedInPhysics = false;
-	pTempGO->mass = 0.0f;
-	pTempGO->inverseMass = 0.0f;
-
-	pTempGO->textureBlend[0] = 1.0f;
-	pTempGO->textureNames[0] = "Rough_rock_014_COLOR.bmp";
-
-	::g_vecGameObjects.push_back( pTempGO );
-
-
-
-	//cMesh cubeMesh = createCube( shaderID );
-	//// Create a new GO
-	//cGameObject* pTempGO2 = new cGameObject();
-
-	//pTempGO2->meshName = "cube";
-	//pTempGO2->diffuseColour = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f );
-
-	//pTempGO2->position = glm::vec3( 0.0f, 0.0f, 0.0f );
-	//pTempGO2->scale = 0.5f;
-	////pTempGO2->rotation = glm::vec3( 0.0f );
-	//pTempGO2->overwrtiteQOrientationFormEuler( glm::vec3( 0.0f, 0.0f, 0.0f ) );
-	//pTempGO2->vel = glm::vec3( 0.0f );
-
-	//pTempGO2->textureBlend[0] = 1.0f;
-	//pTempGO2->textureNames[0] = "Rough_rock_015_COLOR.bmp";
-	////pTempGO2->textureBlend[0] = 1.0f;
-	////pTempGO2->textureNames[0] = "Rough_rock_014_COLOR.bmp";
-
-	//::g_vecGameObjects.push_back( pTempGO2 );
-
-	//if( !::g_pVAOManager->loadMeshIntoVAO( cubeMesh, shaderID ) )
-	//{
-	//	std::cout << "Could not load mesh into VAO" << std::endl;
-	//}
-
-	// Create a new GO
-	cGameObject* pTempGO3 = new cGameObject();
-
-	cMesh theBallMesh;
-	::g_pVAOManager->lookupMeshFromName( "ball", theBallMesh );
-	
-	pTempGO3->meshName = "ball";
-	pTempGO3->diffuseColour = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f );
-
-	pTempGO3->position = glm::vec3( 0.0f, 0.0f, 0.5f );
-	pTempGO3->scale = 0.1f;
-	pTempGO3->overwrtiteQOrientationFormEuler( glm::vec3( 0.0f, 0.0f, 0.0f ) );
-	pTempGO3->vel = glm::vec3( 0.0f );
-	pTempGO3->friendlyName = "ball";
-	pTempGO3->typeOfObject = SPHERE;
-	pTempGO3->bIsUpdatedInPhysics = true;
-	pTempGO3->mass = 0.4;
-	pTempGO3->inverseMass = 1.0f / pTempGO3->mass;
-
-	pTempGO3->radius = theBallMesh.maxExtent / 2 * pTempGO3->scale;
-
-	pTempGO3->textureBlend[0] = 1.0f;
-	pTempGO3->textureNames[0] = "Red_Marble_001_COLOR.bmp";
-
-	::g_vecGameObjects.push_back( pTempGO3 );
-
 }
 
 //Load objects.txt
@@ -807,11 +596,9 @@ void loadObjectsFile( std::string fileName )
 				pTempGO->textureNames[0] = "Rough_rock_015_COLOR.bmp";
 				pTempGO->textureBlend[1] = 0.0f;
 				pTempGO->textureNames[1] = "Red_Marble_001_COLOR.bmp";
-				pTempGO->diffuseColour = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f );
 
 				cMesh tempMesh;
-				::g_pVAOManager->lookupMeshFromName( "ball", tempMesh );
-				
+				::g_pVAOManager->lookupMeshFromName( "ball", tempMesh );				
 				pTempGO->radius = tempMesh.maxExtent / 2 * pTempGO->scale;
 
 			}
@@ -819,7 +606,7 @@ void loadObjectsFile( std::string fileName )
 			{
 				pTempGO->textureBlend[0] = 1.0f;
 				pTempGO->textureNames[0] = "Rough_rock_014_COLOR.bmp";
-				pTempGO->diffuseColour = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f );
+				pTempGO->bIsUpdatedInPhysics = false;
 			}
 
 			::g_vecGameObjects.push_back( pTempGO );
@@ -938,8 +725,8 @@ void PhysicsStep( double deltaTime )
 	glm::vec3 triangleNormal = glm::vec3( 0.0f );
 
 	// NO GRAVITY
-	//const glm::vec3 GRAVITY = glm::vec3( 0.0f, 0.0f, -2.0f );
-	const glm::vec3 GRAVITY = glm::vec3( 0.0f, 0.0f, 0.0f );
+	const glm::vec3 GRAVITY = glm::vec3( 0.0f, 0.0f, -0.1f );
+	//const glm::vec3 GRAVITY = glm::vec3( 0.0f, 0.0f, 0.0f );
 
 	// Identical to the 'render' (drawing) loop
 	for( int index = 0; index != ::g_vecGameObjects.size(); index++ )
@@ -965,17 +752,16 @@ void PhysicsStep( double deltaTime )
 
 		pCurGO->vel += deltaVelocity;
 
-		unsigned long long ballID = cAABBv2::calculateID( pCurGO->position );
+		//unsigned long long ballID = cAABBv2::calculateID( pCurGO->position );
 
-		cAABBv2* theCurAABB = new cAABBv2( pCurGO->position, 1.0f );
+		//cAABBv2* theCurAABB = new cAABBv2( pCurGO->position, 1.0f );
 
-		::g_terrainAABBBroadPhase->areThereTrianglesInAABB( pCurGO->position, theCurAABB );
-			
+		//::g_terrainAABBBroadPhase->areThereTrianglesInAABB( pCurGO->position, theCurAABB );			
 
 		// Stores the closests points in a Vector to be used bellow
-		glm::vec3 thePointToTest = pCurGO->position;
-		//::g_vecPoints = 
-		::g_vecPoints = findClosestPointsOfAABB( thePointToTest, theCurAABB );
+		//glm::vec3 thePointToTest = pCurGO->position;
+		////::g_vecPoints = 
+		//::g_vecPoints = findClosestPointsOfAABB( thePointToTest, theCurAABB );
 
 		switch( pCurGO->typeOfObject )
 		{
@@ -992,41 +778,44 @@ void PhysicsStep( double deltaTime )
 
 				switch( pOtherObject->typeOfObject )
 				{
-				case eTypeOfObject::AABB:
+				case eTypeOfObject::SPHERE:
 
-					for( int i_point = 0; i_point != ::g_vecPoints.size(); i_point++ )
-					{	// Check if any point is in contact with the pCurGO
+					break;
+				case eTypeOfObject::PLANE:
 
-						// TODO Implement the collision with Y axis as well, this would be the logic
-						// The Pythagorean distance 
-						float distance = glm::distance( pCurGO->position, glm::vec3( ::g_vecPoints[i_point].point.x,
-							::g_vecPoints[i_point].point.y,
-							::g_vecPoints[i_point].point.z ) );
-						float tempRadius = pCurGO->radius; // *1.2;
+					//for( int i_point = 0; i_point != ::g_vecPoints.size(); i_point++ )
+					//{	// Check if any point is in contact with the pCurGO
 
-						if( distance <= pCurGO->radius )
-						{	// COLLISION!!
+					//	// TODO Implement the collision with Y axis as well, this would be the logic
+					//	// The Pythagorean distance 
+					//	float distance = glm::distance( pCurGO->position, glm::vec3( ::g_vecPoints[i_point].point.x,
+					//		::g_vecPoints[i_point].point.y,
+					//		::g_vecPoints[i_point].point.z ) );
+					//	float tempRadius = pCurGO->radius; // *1.2;
 
-							glm::vec3 triVertex[3];
-							triVertex[0] = g_vecPoints[i_point].triangle.verts[0];
-							triVertex[1] = g_vecPoints[i_point].triangle.verts[1];
-							triVertex[2] = g_vecPoints[i_point].triangle.verts[2];							
+					//	if( distance <= pCurGO->radius )
+					//	{	// COLLISION!!
 
-							glm::vec3 theCenter = ::g_vecPoints[i_point].triangle.calcCentre();
+					//		glm::vec3 triVertex[3];
+					//		triVertex[0] = g_vecPoints[i_point].triangle.verts[0];
+					//		triVertex[1] = g_vecPoints[i_point].triangle.verts[1];
+					//		triVertex[2] = g_vecPoints[i_point].triangle.verts[2];							
 
-							triangleNormal = returnNormal2( triVertex, theCenter );
+					//		glm::vec3 theCenter = ::g_vecPoints[i_point].triangle.calcCentre();
 
-							float length = glm::distance( theCenter, triangleNormal );
+					//		triangleNormal = returnNormal2( triVertex, theCenter );
 
-							bounceSphereAgainstPlane( pCurGO, pOtherObject, triangleNormal );
-							
-							// Return sphere to previous position before the impact
-							if( pCurGO->prevPosition != glm::vec3( NULL ) )
-								pCurGO->position = pCurGO->prevPosition;
-							
-							break;
-						}
-					}
+					//		float length = glm::distance( theCenter, triangleNormal );
+
+					//		bounceSphereAgainstPlane( pCurGO, pOtherObject, triangleNormal );
+					//		
+					//		// Return sphere to previous position before the impact
+					//		if( pCurGO->prevPosition != glm::vec3( NULL ) )
+					//			pCurGO->position = pCurGO->prevPosition;
+					//		
+					//		break;
+					//	}
+					//}
 					break;
 				}
 			}
@@ -1038,7 +827,7 @@ void PhysicsStep( double deltaTime )
 
 		::g_pDebugRenderer->addLine( pCurGO->position, velEndPoint, color, false );
 
-		break;
+		//break;
 
 	}//for ( int index...
 
@@ -1225,7 +1014,7 @@ void printCameraDetails()
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-void processInput( GLFWwindow *window, double deltaTime )
+void ProcessCameraInput( GLFWwindow *window, double deltaTime )
 {
 	if( glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS )
 		glfwSetWindowShouldClose( window, true );
@@ -1238,4 +1027,8 @@ void processInput( GLFWwindow *window, double deltaTime )
 		::g_pTheMouseCamera->ProcessKeyboard( LEFT, deltaTime );
 	if( glfwGetKey( window, GLFW_KEY_D ) == GLFW_PRESS )
 		::g_pTheMouseCamera->ProcessKeyboard( RIGHT, deltaTime );
+	if( glfwGetKey( window, GLFW_KEY_Q ) == GLFW_PRESS )
+		::g_pTheMouseCamera->ProcessKeyboard( UP, deltaTime );
+	if( glfwGetKey( window, GLFW_KEY_E ) == GLFW_PRESS )
+		::g_pTheMouseCamera->ProcessKeyboard( DOWN, deltaTime );
 }

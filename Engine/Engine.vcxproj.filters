@@ -16,9 +16,6 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{f243418e-16fc-4d11-949d-086e84d49eb2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Map">
-      <UniqueIdentifier>{b2d739ee-57c3-4f2f-9bfb-d46d2c8c42fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Texture">
       <UniqueIdentifier>{0ed5b0d1-6208-4c64-96b1-b00cc21bc209}</UniqueIdentifier>
     </Filter>
@@ -74,12 +71,6 @@
     </ClCompile>
     <ClCompile Include="Physics.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cRandomMap.cpp">
-      <Filter>Map</Filter>
-    </ClCompile>
-    <ClCompile Include="MapUtilities.cpp">
-      <Filter>Map</Filter>
     </ClCompile>
     <ClCompile Include="Texture\C24BitBMPpixel.cpp">
       <Filter>Texture</Filter>
@@ -139,12 +130,6 @@
     </ClInclude>
     <ClInclude Include="Physics.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cRandomMap.h">
-      <Filter>Map</Filter>
-    </ClInclude>
-    <ClInclude Include="MapUtilities.h">
-      <Filter>Map</Filter>
     </ClInclude>
     <ClInclude Include="sVertex_xyz_rgba_n_uv2_bt.h">
       <Filter>Header Files</Filter>
