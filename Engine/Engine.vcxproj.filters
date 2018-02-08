@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{f243418e-16fc-4d11-949d-086e84d49eb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{b2d739ee-57c3-4f2f-9bfb-d46d2c8c42fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture">
+      <UniqueIdentifier>{0ed5b0d1-6208-4c64-96b1-b00cc21bc209}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global">
+      <UniqueIdentifier>{95cb8858-c409-4863-8828-4c0172eb84ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{0b33d9fa-686b-4fa9-a7fc-161eab405656}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AABB">
+      <UniqueIdentifier>{a06295de-0878-4152-b267-801057d0e0a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugRenderer">
+      <UniqueIdentifier>{6bb90eed-45d7-4e2a-8234-1eae19a0fe20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Models">
+      <UniqueIdentifier>{bafab6c3-531b-483a-b832-07af93459057}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TheMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cTriangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelUtilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cShaderManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cGameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cVAOMeshManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cLightManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cRandomMap.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MapUtilities.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture\C24BitBMPpixel.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture\cBasicTextureManager.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture\CTextureFromBMP.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="GLFW_keyboardCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\AABB_triangles.cpp">
+      <Filter>AABB</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\cAABBBroadPhase.cpp">
+      <Filter>AABB</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\cAABBv2.cpp">
+      <Filter>AABB</Filter>
+    </ClCompile>
+    <ClCompile Include="cDebugRenderer.cpp">
+      <Filter>DebugRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="generalGLStuff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cMouseCamera.h">
+      <Filter>Camera</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cTriangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelUtilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cShaderManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cGameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cVAOMeshManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cLightManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cRandomMap.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapUtilities.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="sVertex_xyz_rgba_n_uv2_bt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture\C24BitBMPpixel.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture\cBasicTextureManager.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture\CTextureFromBMP.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="globalOpenGL_GLFW.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="globalGameStuff.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\AABB_triangles.h">
+      <Filter>AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\cAABBBroadPhase.h">
+      <Filter>AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\cAABBv2.h">
+      <Filter>AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="sVAOInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cDebugRenderer.h">
+      <Filter>DebugRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="iDebugRenderer.h">
+      <Filter>DebugRenderer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\simpleVert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="assets\shaders\simpleFrag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>
