@@ -21,6 +21,7 @@ namespace nPhysics
 		glm::vec3 Velocity;
 		glm::vec3 Rotation;
 		glm::vec3 Acceleration;
+		glm::vec3 AngularVelocity;
 
 		float Mass;
 		float invMass;

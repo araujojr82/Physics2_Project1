@@ -2,13 +2,16 @@
 
 namespace nPhysics
 {
-	cRigidBody::cRigidBody(const sRigidBodyDesc& desc, iShape* shape)
-		: mShape(shape)
-		, mPosition(desc.Position)
-		, mVelocity(desc.Velocity)
-		, mMass(desc.Mass)
-		, mRotation(desc.Rotation)
-		
+	cRigidBody::cRigidBody( const sRigidBodyDesc& desc, iShape* shape )
+		: mShape( shape )
+		, mPosition( desc.Position )
+		, mPrevPosition( desc.PrevPosition )
+		, mVelocity( desc.Velocity )
+		, mMass( desc.Mass )
+		, mInvMass( desc.invMass )
+		, mRotation( desc.Rotation )
+		, mAcceleration( desc.Acceleration )
+		, mAngularVelocity( desc.AngularVelocity )
 	{
 		
 	}

@@ -500,7 +500,7 @@ iDebugRenderer::sDebugLine::sDebugLine()
 	return;
 }
 
-iDebugRenderer::sDebugLine::sDebugLine( glm::vec3 start, glm::vec3 end, glm::vec3 colour, bool /*bPersist=false*/ )
+iDebugRenderer::sDebugLine::sDebugLine( glm::vec3 start, glm::vec3 end, glm::vec3 colour, bool bPersist /*false*/ )
 {
 	this->points[0] = start;
 	this->points[1] = end;
@@ -510,7 +510,7 @@ iDebugRenderer::sDebugLine::sDebugLine( glm::vec3 start, glm::vec3 end, glm::vec
 	return;
 }
 
-iDebugRenderer::sDebugLine::sDebugLine( glm::vec3 points[2], glm::vec3 colour, bool /*bPersist=false*/ )
+iDebugRenderer::sDebugLine::sDebugLine( glm::vec3 points[2], glm::vec3 colour, bool bPersist /*false*/ )
 {
 	this->points[0] = points[0];
 	this->points[1] = points[1];

@@ -45,17 +45,15 @@ namespace nPhysics
 		//}
 
 
-		size_t numBodies = mRigidBody.size();
+		int numBodies = mRigidBody.size();
 
-
-		for( size_t iA = 0; iA < numBodies - 1; iA++ )
+		for( int i = 0; i != numBodies; i++ )
 		{
-
-			for( size_t iB = 0; iB < numBodies - 1; iB++ )
+			for( int j = 0; j != numBodies; j++ )
 			{
-				if( iA == iB ) break; //Don't test for itself
+				if( i == j ) continue; //Don't test for itself
 
-				Collide( mRigidBody[iA], mRigidBody[iB] );
+				Collide( mRigidBody[i], mRigidBody[j] );
 
 				////Add colliding pairs
 				//collidingPairs.push_back( std::make_pair( mRigidBody[iA], mRigidBody[iB] ))
@@ -70,6 +68,8 @@ namespace nPhysics
 		{
 			cRigidBody* rb = *itRigidBody;
 			rb->mAcceleration = glm::vec3( 0.0f );
+
+			rb->mPrevPosition = rb->mPosition;
 
 			itRigidBody++;
 		}
@@ -150,16 +150,39 @@ namespace nPhysics
 							glm::vec3 collisionPoint;
 
 							// check for collision
-							if( intersect_moving_sphere_plane( pA, radius, bodyA->mVelocity, pNormal, pConst, result, collisionPoint ) )
+							intersect_moving_sphere_plane( pA, radius, bodyA->mVelocity, pNormal, pConst, result, collisionPoint );
+							if( result == 0 )
+							{
+								bodyA->SetPosition( bodyA->mPrevPosition );
 								return CollideSpherePlane( bodyA, sphereA, bodyB, planeB );
+							}								
 							else
 								break;
 						}
 						break;
 					case nPhysics::SHAPE_TYPE_SPHERE:
 						{
+							glm::vec3 pA;
+							bodyA->GetPosition( pA );
+							float radiusA;
+							sphereA->GetSphereRadius( radiusA );
+
 							cSphereShape* sphereB = dynamic_cast< cSphereShape* > ( bodyB->GetShape() );
-							//return CollideSphereSphere( bodyA, sphereA, bodyB, sphereB );
+
+							glm::vec3 pB;
+							bodyB->GetPosition( pB );
+							float radiusB;
+							sphereB->GetSphereRadius( radiusB );
+
+							float result;
+
+							intersect_moving_sphere_sphere( pA, radiusA, bodyA->mVelocity, pB, radiusB, bodyB->mVelocity, result );
+							if( result == 1 )
+							{
+								//return CollideSphereSphere( bodyA, sphereA, bodyB, sphereB );
+							}
+							else
+								break;
 						}
 						break;
 				}

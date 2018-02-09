@@ -85,7 +85,7 @@ cBasicTextureManager*	g_pTextureManager = 0;
 cDebugRenderer*			g_pDebugRenderer = 0;
 
 // This contains the AABB grid for the terrain...
-cAABBBroadPhase* g_terrainAABBBroadPhase = 0;
+//cAABBBroadPhase* g_terrainAABBBroadPhase = 0;
 
 // Other uniforms:
 GLint uniLoc_materialDiffuse = -1;
@@ -123,14 +123,9 @@ struct sMeshparameters		// for the Meshes' input file
 	std::string meshFilename;
 };
 
-//struct pointTriangles
-//{
-//	glm::vec3 point;
-//	sTriAABB triangle;
-//};
 
 //std::vector< glm::vec3 > g_vecPoints;
-std::vector< pointTriangles > g_vecPoints;
+//std::vector< pointTriangles > g_vecPoints;
 
 // Forward declare the Functions
 void loadConfigFile( std::string fileName, sWindowConfig& wConfig );
@@ -138,34 +133,11 @@ sGOparameters parseObjLine( std::ifstream &source );
 void loadObjectsFile( std::string fileName );
 sMeshparameters parseMeshLine( std::ifstream &source );
 void loadMeshesFile( std::string fileName, GLint ShaderID );
-//void loadLightObjects();
-//void PhysicsStep( double deltaTime );
 void DrawObject( cGameObject* pTheGO );
 float generateRandomNumber( float min, float max );
 void mouse_callback( GLFWwindow* window, double xpos, double ypos );
 void scroll_callback( GLFWwindow* window, double xoffset, double yoffset );
 void ProcessCameraInput( GLFWwindow *window, double deltaTime );
-
-//--> CREATING THE PHYSICS LIBRARY DYNAMIC METHODS
-// Instantiate the Physics Library 
-//HINSTANCE hGetProckDll = LoadLibraryA( libraryFile.c_str() );
-//
-//// Creating the Physics World from the Library
-//std::string createWorldName = "CreateWorld";
-//f_CreateWorld CreateWorld = ( f_CreateWorld )GetProcAddress( hGetProckDll, createWorldName.c_str() );
-//
-//// Creating the Physics Factory from the Library
-//std::string createFactoryName = "CreateFactory";
-//f_CreateFactory CreateFactory = ( f_CreateFactory )GetProcAddress( hGetProckDll, createFactoryName.c_str() );
-//
-//// Creating a Physics RigidBody from the Library
-//std::string CreateRigidBodyName = "CreateRigidBody";
-//f_CreateRigidBody CreateRigidBody = ( f_CreateRigidBody )GetProcAddress( hGetProckDll, CreateRigidBodyName.c_str() );
-//
-//// Creating a Physics Shape from the Library
-//std::string CreateShapeName = "CreateShape";
-//f_CreateShape CreateShape = ( f_CreateShape )GetProcAddress( hGetProckDll, CreateShapeName.c_str() );
-////<-- CREATING THE PHYSICS LIBRARY DYNAMIC METHODS
 
 
 void DrawRenderStuff( glm::mat4 view, glm::mat4 projection )
@@ -457,8 +429,8 @@ int main( void )
 			GLint textBlend01_ID = glGetUniformLocation(curShaderID, "textureBlend01");
 
 			// This connects the texture sampler to the texture units... 
-			glUniform1i(textSampler00_ID, 0);		// Enterprise
-			glUniform1i(textSampler01_ID, 1);		// GuysOnSharkUnicorn
+			glUniform1i(textSampler00_ID, 0);
+			glUniform1i(textSampler01_ID, 1);
 		}
 
 
@@ -480,7 +452,7 @@ int main( void )
 		{
 			cGameObject* pTheGO = ::g_vecGameObjects[index];
 
-			DrawObject( pTheGO );						
+			DrawObject( pTheGO );
 
 		}//for ( int index = 0...
 
@@ -670,6 +642,8 @@ void loadObjectsFile( std::string fileName )
 				pTempGO->scale = allObjects[index].scale;
 			}
 
+			theDesc.PrevPosition = theDesc.Position;
+
 			if( pTempGO->meshName == "ball" )
 			{
 				pTempGO->textureBlend[0] = 1.0f;
@@ -696,8 +670,9 @@ void loadObjectsFile( std::string fileName )
 												   tempMesh.pVertices[tempMesh.pTriangles[0].vertex_ID_0].nz );
 
 				planeNormal = glm::normalize( planeNormal );
+				planeNormal *= glm::vec3( -1.0, -1.0, -1.0 );
 
-				float planeConst = glm::dot( planeNormal, theDesc.Position );
+				float planeConst = glm::dot( theDesc.Position, planeNormal );
 
 				newBody = ::g_pThePhysicsFactory->CreateRigidBody( theDesc, g_pThePhysicsFactory->CreatePlane( planeNormal, planeConst ) );
 			}
@@ -783,154 +758,6 @@ sMeshparameters parseMeshLine( std::ifstream &source ) {
 
 	return sMeshpar;
 }
-
-//void loadLightObjects()
-//{
-//	for( int index = 0; index < g_NUMBER_OF_LIGHTS; index++ )
-//	{
-//		// Create a new GO
-//		cGameObject* pTempGO = new cGameObject();
-//
-//		pTempGO->meshName = "sphere"; // Set the name of the mesh
-//
-//									  // position is based on light position
-//		pTempGO->position = ::g_pLightManager->vecLights[index].position;
-//
-//		if( index == 0 ) pTempGO->scale = 3.0f;
-//		else pTempGO->scale = 1.0f;
-//
-//		// Each light is initially white
-//		pTempGO->diffuseColour = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f );
-//
-//		pTempGO->bIsLight = true;
-//		pTempGO->myLight = index;
-//
-//		::g_vecGameObjects.push_back( pTempGO );
-//	}
-//}
-
-//// Update the world 1 "step" in time
-//void PhysicsStep( double deltaTime )
-//{
-//	// Distance                          m
-//	// Velocity = distance / time		 m/s
-//	// Accleration = velocity / time     m/s/s
-//
-//	// Distance = time * velocity
-//	// velocity = time * acceleration
-//
-//	glm::vec3 triangleNormal = glm::vec3( 0.0f );
-//
-//	// NO GRAVITY
-//	const glm::vec3 GRAVITY = glm::vec3( 0.0f, 0.0f, -1.1f );
-//	//const glm::vec3 GRAVITY = glm::vec3( 0.0f, 0.0f, 0.0f );
-//
-//	// Identical to the 'render' (drawing) loop
-//	for( int index = 0; index != ::g_vecGameObjects.size(); index++ )
-//	{
-//		cGameObject* pCurGO = ::g_vecGameObjects[index];
-//
-//		// Is this object to be updated?
-//		if( !pCurGO->bIsUpdatedInPhysics )
-//		{	// DON'T update this
-//			continue;		// Skip everything else in the for
-//		}
-//
-//		pCurGO->prevPosition = pCurGO->position;
-//
-//		// Explicity Euler integration (RK4)
-//		// New position is based on velocity over time
-//		glm::vec3 deltaPosition = ( float )deltaTime * pCurGO->vel;
-//		pCurGO->position += deltaPosition;
-//
-//		// New velocity is based on acceleration over time
-//		glm::vec3 deltaVelocity;
-//		deltaVelocity = ( ( float )deltaTime * pCurGO->accel ) + ( ( float )deltaTime * GRAVITY );
-//
-//		pCurGO->vel += deltaVelocity;
-//
-//		//unsigned long long ballID = cAABBv2::calculateID( pCurGO->position );
-//
-//		//cAABBv2* theCurAABB = new cAABBv2( pCurGO->position, 1.0f );
-//
-//		//::g_terrainAABBBroadPhase->areThereTrianglesInAABB( pCurGO->position, theCurAABB );			
-//
-//		// Stores the closests points in a Vector to be used bellow
-//		//glm::vec3 thePointToTest = pCurGO->position;
-//		////::g_vecPoints = 
-//		//::g_vecPoints = findClosestPointsOfAABB( thePointToTest, theCurAABB );
-//
-//		switch( pCurGO->typeOfObject )
-//		{
-//		case eTypeOfObject::SPHERE:
-//			//	// Compare this to EVERY OTHER object in the scene
-//			for( int indexEO = 0; indexEO != ::g_vecGameObjects.size(); indexEO++ )
-//			{
-//				// Don't test for myself
-//				if( index == indexEO )
-//					continue;		// It's me!!
-//
-//				cGameObject* pOtherObject = ::g_vecGameObjects[indexEO];
-//				// Is another object
-//
-//				switch( pOtherObject->typeOfObject )
-//				{
-//				case eTypeOfObject::SPHERE:
-//
-//					break;
-//				case eTypeOfObject::PLANE:
-//
-//					//for( int i_point = 0; i_point != ::g_vecPoints.size(); i_point++ )
-//					//{	// Check if any point is in contact with the pCurGO
-//
-//					//	// TODO Implement the collision with Y axis as well, this would be the logic
-//					//	// The Pythagorean distance 
-//					//	float distance = glm::distance( pCurGO->position, glm::vec3( ::g_vecPoints[i_point].point.x,
-//					//		::g_vecPoints[i_point].point.y,
-//					//		::g_vecPoints[i_point].point.z ) );
-//					//	float tempRadius = pCurGO->radius; // *1.2;
-//
-//					//	if( distance <= pCurGO->radius )
-//					//	{	// COLLISION!!
-//
-//					//		glm::vec3 triVertex[3];
-//					//		triVertex[0] = g_vecPoints[i_point].triangle.verts[0];
-//					//		triVertex[1] = g_vecPoints[i_point].triangle.verts[1];
-//					//		triVertex[2] = g_vecPoints[i_point].triangle.verts[2];							
-//
-//					//		glm::vec3 theCenter = ::g_vecPoints[i_point].triangle.calcCentre();
-//
-//					//		triangleNormal = returnNormal2( triVertex, theCenter );
-//
-//					//		float length = glm::distance( theCenter, triangleNormal );
-//
-//					//		bounceSphereAgainstPlane( pCurGO, pOtherObject, triangleNormal );
-//					//		
-//					//		// Return sphere to previous position before the impact
-//					//		if( pCurGO->prevPosition != glm::vec3( NULL ) )
-//					//			pCurGO->position = pCurGO->prevPosition;
-//					//		
-//					//		break;
-//					//	}
-//					//}
-//					break;
-//				}
-//			}
-//		}
-//
-//		// Calculate the normal using the center as reference
-//		glm::vec3 velEndPoint = pCurGO->vel + pCurGO->position;
-//		glm::vec3 velBeginPoint = ( glm::normalize( pCurGO->vel ) * glm::vec3( pCurGO->radius, pCurGO->radius, pCurGO->radius ) );
-//		glm::vec3 color = glm::vec3( 1.0f, 1.0f, 1.0f );
-//
-//		::g_pDebugRenderer->addLine( pCurGO->position, velEndPoint, color, false );
-//
-//		//break;
-//
-//	}//for ( int index...
-//
-//	return;
-//}
 
 // Draw a single object
 void DrawObject( cGameObject* pTheGO )
