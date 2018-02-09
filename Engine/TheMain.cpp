@@ -18,7 +18,7 @@
 #include <string>
 #include <vector>						// smart array, "array" in most languages
 #include <random>
-#include <time.h>
+#include <chrono>
 
 #include "Utilities.h"
 #include "ModelUtilities.h"
@@ -241,6 +241,7 @@ int main( void )
 	gladLoadGLLoader( ( GLADloadproc )glfwGetProcAddress );
 	glfwSwapInterval( 1 );
 	glfwSetCursorPosCallback( window, mouse_callback );
+	glfwSetInputMode( window, GLFW_CURSOR, GLFW_CURSOR_DISABLED );
 	glfwSetScrollCallback( window, scroll_callback );
 
 	std::cout << glGetString( GL_VENDOR ) << " "
@@ -542,11 +543,7 @@ void loadConfigFile( std::string fileName, sWindowConfig& wConfig )
 // Generate real random numbers
 float generateRandomNumber( float min, float max )
 {
-
-	time_t curTime;
-	time( &curTime );
-
-	unsigned int seed = (int)time;
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
 	std::default_random_engine generator( seed );
 	std::uniform_real_distribution<float> distribution( min, max );
