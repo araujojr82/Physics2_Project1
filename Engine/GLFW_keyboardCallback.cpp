@@ -7,23 +7,58 @@ bool isShiftKeyDown( int mods, bool bByItself = true );
 bool isCtrlKeyDown( int mods, bool bByItself = true );
 bool isAltKeyDown( int mods, bool bByItself = true );
 
+bool findNextObject( int &currentObject )
+{
+	int i;
+	if( currentObject == NULL )
+	{
+		i = 0;
+	}		
+	else
+	{
+		int i = currentObject + 1;	// The next Object after the Current
+		if( i > ::g_vecGameObjects.size() ) i = 0;
+	}
+
+	for( ; i != ::g_vecGameObjects.size(); i++ )
+	{
+		if( ::g_vecGameObjects[i]->meshName != "ball" ) 
+			continue;
+		else
+		{
+			currentObject = i;
+			return true;
+			//break;
+		}
+	}
+	return false;
+}
+
 /*static*/ void key_callback( GLFWwindow* window, int key, int scancode, int action, int mods )
 {
 	if( key == GLFW_KEY_ESCAPE && action == GLFW_PRESS )
 		glfwSetWindowShouldClose( window, GLFW_TRUE );
 
 	if( key == GLFW_KEY_SPACE && action == GLFW_PRESS )
-	{
-		if( ::g_vecGameObjects[0]->textureBlend[0] == 1.0f )
+	{	
+		if( ::g_selectedSphere == NULL )
+			findNextObject( ::g_selectedSphere );
+
+		if( ::g_vecGameObjects[::g_selectedSphere]->textureBlend[0] == 1.0f )
 		{
-			::g_vecGameObjects[0]->textureBlend[0] = 0.0f;
-			::g_vecGameObjects[0]->textureBlend[1] = 1.0f;
+			::g_vecGameObjects[::g_selectedSphere]->textureBlend[0] = 0.0f;
+			::g_vecGameObjects[::g_selectedSphere]->textureBlend[1] = 1.0f;
 		}		
 		else
 		{
-			::g_vecGameObjects[0]->textureBlend[0] = 1.0f;
-			::g_vecGameObjects[0]->textureBlend[1] = 0.0f;
+			::g_vecGameObjects[::g_selectedSphere]->textureBlend[0] = 1.0f;
+			::g_vecGameObjects[::g_selectedSphere]->textureBlend[1] = 0.0f;
 		}	
+	}
+
+	if( key == GLFW_KEY_TAB && action == GLFW_PRESS )
+	{
+		findNextObject( ::g_selectedSphere );
 	}
 	
 	if( key == GLFW_KEY_ENTER && action == GLFW_PRESS )

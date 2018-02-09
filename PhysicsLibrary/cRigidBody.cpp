@@ -33,10 +33,17 @@ namespace nPhysics
 		transformOut[3][2] = mPosition.z;
 		transformOut[3][3] = 1.f;
 	}
+
 	void cRigidBody::GetPosition(glm::vec3& positionOut)
 	{
 		positionOut = mPosition;
 	}
+
+	void cRigidBody::GetVelocity( glm::vec3& velocityOut )
+	{
+		velocityOut = mVelocity;
+	}
+
 	void cRigidBody::GetRotation(glm::vec3& rotationOut)
 	{
 		rotationOut = glm::eulerAngles(mRotation);

@@ -211,8 +211,6 @@ namespace nPhysics
 							float radius;
 							sphereB->GetSphereRadius( radius );
 
-							//glm::vec3 pA;
-							//bodyA->GetPosition( pA );
 							glm::vec3 pNormal;
 							planeA->GetPlaneNormal( pNormal );
 							float pConst;
@@ -230,11 +228,6 @@ namespace nPhysics
 							}
 							else
 								break;
-
-
-
-
-
 						}
 						break;
 				}
@@ -244,7 +237,6 @@ namespace nPhysics
 
 		return false;
 	}
-
 
 	bool cPhysicsWorld::CollideSpherePlane( cRigidBody* bodyA, cSphereShape* sphereA, cRigidBody* bodyB, cPlaneShape* planeB )
 	{

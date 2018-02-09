@@ -58,12 +58,12 @@ std::string libraryFile = "PhysicsLibrary.dll";
 // END OF STUFF FOR PHYSICS LIBRARY
 
 
-int g_GameObjNumber = 0;				// game object vector position number 
-int g_LightObjNumber = 0;				// light object vector position
+//int g_GameObjNumber = 0;				// game object vector position number 
+//int g_LightObjNumber = 0;				// light object vector position
 
-int g_selectedSphere = 0;
+int g_selectedSphere = NULL;
 
-int g_NUMBER_OF_LIGHTS = 2;
+int g_NUMBER_OF_LIGHTS = 1;
 
 bool bIsWireframe;
 
@@ -147,6 +147,7 @@ void DrawRenderStuff( glm::mat4 view, glm::mat4 projection )
 		cGameObject* pTheGO = ::g_vecGameObjects[index];
 		if( pTheGO->meshName == "ball" )
 		{
+			// Draw radius for the spheres...
 			glm::vec3 color = glm::vec3( 1.0f, 1.0f, 0.0f );
 			
 			glm::vec3 center;
@@ -165,6 +166,14 @@ void DrawRenderStuff( glm::mat4 view, glm::mat4 projection )
 
 			radiusEnd = center + glm::vec3( 0.0f, 0.0f, radius );
 			::g_pDebugRenderer->addLine( center, radiusEnd, color, false );
+
+			// Draw velocity vector for the spheres...
+			glm::vec3 velocityEnd;
+			pTheGO->rigidBody->GetVelocity( velocityEnd );
+
+			velocityEnd += center;
+			color = glm::vec3( 1.0f, 0.0f, 0.0f );
+			::g_pDebugRenderer->addLine( center, velocityEnd, color, false );
 		}
 	}
 	::g_pDebugRenderer->RenderDebugObjects( view, projection );

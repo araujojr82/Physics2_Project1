@@ -16,6 +16,7 @@
 
 // Remember to #include <vector>...
 extern std::vector< cGameObject* >  g_vecGameObjects;
+extern int g_selectedSphere;
 
 extern bool bIsWireframe;
 
@@ -31,13 +32,13 @@ cGameObject* findObjectByUniqueID( unsigned int ID, std::vector<cGameObject*> &v
 extern cLightManager*	g_pLightManager;	// (theMain.cpp)
 
 											// Super basic physics update function
-void PhysicsStep( double deltaTime );
+//void PhysicsStep( double deltaTime );
 
 //extern cModelAssetLoader* g_pModelAssetLoader;	// (ModelUtilies.cpp)
 
 												// The teapots
 												//extern cGameObject* pTP0;
-const std::string THEBALLNAME = "ball";		// Now that we have a lookup
+const std::string THEBALLNAME = "ball";			// Now that we have a lookup
 
 //extern cMouseCamera* g_pTheMouseCamera;		// (theMain.cpp)
 

@@ -20,6 +20,7 @@ namespace nPhysics
 
 		virtual void GetTransform(glm::mat4& transformOut);
 		virtual void GetPosition(glm::vec3& positionOut);
+		virtual void GetVelocity( glm::vec3& velocityOut );
 		virtual void GetRotation(glm::vec3& rotationOut);
 
 		virtual void SetTransform( glm::mat4 transformIn );
