@@ -644,6 +644,10 @@ void loadObjectsFile( std::string fileName )
 
 			theDesc.PrevPosition = theDesc.Position;
 
+			//theDesc.Velocity.x = generateRandomNumber( -1.1f, 1.1f );
+			//theDesc.Velocity.y = generateRandomNumber( -1.1f, 1.1f );
+			//theDesc.Velocity.z = 0.0f;
+
 			if( pTempGO->meshName == "ball" )
 			{
 				pTempGO->textureBlend[0] = 1.0f;
@@ -919,6 +923,8 @@ void mouse_callback( GLFWwindow* window, double xpos, double ypos )
 	::g_lastY = ypos;
 
 	::g_pTheMouseCamera->ProcessMouseMovement( xoffset, yoffset );
+
+	//std::cout << "Mouse Position: " << xpos << ", " << ypos << " Offset: " << xoffset << ", " << yoffset << std::endl;
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called

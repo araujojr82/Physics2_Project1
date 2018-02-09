@@ -27,12 +27,16 @@ namespace nPhysics
 
 			if( shape == SHAPE_TYPE_PLANE ) break;
 
-			//Explicity Euler integration (RK4)
-			// New position is based on velocity over time
-			rb->mPosition += rb->mVelocity * ( float )deltaTime;
-			
-			// New velocity is based on acceleration over time
-			rb->mVelocity += ( ( float )deltaTime * rb->mAcceleration ) + ( ( float )deltaTime * GRAVITY );
+			////Explicity Euler integration (RK4)
+			//// New position is based on velocity over time
+			//rb->mPosition += rb->mVelocity * ( float )deltaTime;
+			//
+			//// New velocity is based on acceleration over time
+			//rb->mVelocity += ( ( float )deltaTime * rb->mAcceleration ) + ( ( float )deltaTime * GRAVITY );			
+
+			glm::vec3 acc = GRAVITY;
+
+			this->myIntegrator.RK4( rb->mPosition, rb->mVelocity, acc, deltaTime );
 
 			itRigidBody++;
 		}
@@ -177,9 +181,11 @@ namespace nPhysics
 							float result;
 
 							intersect_moving_sphere_sphere( pA, radiusA, bodyA->mVelocity, pB, radiusB, bodyB->mVelocity, result );
-							if( result == 1 )
+							if( result == 0 )
 							{
-								//return CollideSphereSphere( bodyA, sphereA, bodyB, sphereB );
+								bodyA->SetPosition( bodyA->mPrevPosition );
+								bodyB->SetPosition( bodyB->mPrevPosition );
+								return CollideSphereSphere( bodyA, sphereA, bodyB, sphereB );
 							}
 							else
 								break;
@@ -190,7 +196,7 @@ namespace nPhysics
 			break;
 		case nPhysics::SHAPE_TYPE_PLANE:
 			{
-				cPlaneShape * planeA = dynamic_cast< cPlaneShape* >( bodyB->GetShape() );
+				cPlaneShape * planeA = dynamic_cast< cPlaneShape* >( bodyA->GetShape() );
 				switch( typeB )
 				{
 					case nPhysics::SHAPE_TYPE_PLANE:
@@ -199,6 +205,36 @@ namespace nPhysics
 						{	// do sphere-plane collision 
 							cSphereShape* sphereB = dynamic_cast< cSphereShape* > ( bodyB->GetShape() );
 							//return CollideSpherePlane( bodyB, sphereB, bodyA, planeA );
+
+							glm::vec3 pB;
+							bodyB->GetPosition( pB );
+							float radius;
+							sphereB->GetSphereRadius( radius );
+
+							//glm::vec3 pA;
+							//bodyA->GetPosition( pA );
+							glm::vec3 pNormal;
+							planeA->GetPlaneNormal( pNormal );
+							float pConst;
+							planeA->GetPlaneConst( pConst );
+
+							float result;
+							glm::vec3 collisionPoint;
+
+							// check for collision
+							intersect_moving_sphere_plane( pB, radius, bodyB->mVelocity, pNormal, pConst, result, collisionPoint );
+							if( result == 0 )
+							{
+								bodyB->SetPosition( bodyB->mPrevPosition );
+								return CollideSpherePlane( bodyB, sphereB, bodyA, planeA );
+							}
+							else
+								break;
+
+
+
+
+
 						}
 						break;
 				}
@@ -223,11 +259,12 @@ namespace nPhysics
 		//use glm::reflect( velocity, normal )
 
 		bodyA->mVelocity = glm::reflect( bodyA->mVelocity, pNormal );
+		bodyA->mVelocity -= bodyA->mVelocity * 0.2f;
 
 		//glm::vec3 nComponent = glm::project();
 		//	bodyA->mVelocity, pNormal );
 
-		//sphereBody->mVelocity -= nComponent * 0.2f;
+		//bodyA->mVelocity -= nComponent * 0.2f;
 		//sphereBody->mPosition = ( c + v * t );
 
 		//mIntegrator.RK4( sphereBody->mPosition, sphereBody->mVeloity, spereBody - mAcceleration, mGravity, mDt*( 1.f - t ) );
@@ -241,10 +278,21 @@ namespace nPhysics
 
 		//Check for collision  return false if not
 
-		//mt = ma + mb;
 
-		//sphereBodyA->mVelocity = ( c*mb*( vb - va ) + ma * va + mb * vb ) / mt;
-		//sphereBodyB->mVelocity = ( c*mb*( va - vb ) + mb * vb + ma * va ) / mt;
+		// move the spheres back to the point of collision
+		//bodyA->mPosition = bodyA->mPrevPosition + bodyA->mVelocity * t;
+		//bodyB->mPosition = bodyB->mPrevPosition + bodyB->mVelocity * t;
+
+		float massA = bodyA->mMass;
+		float massB = bodyB->mMass;
+		float totalMass = massA + massB;
+
+		glm::vec3 velA = bodyA->mVelocity;
+		glm::vec3 velB = bodyB->mVelocity;
+		float cR = 0.2f;
+
+		bodyA->mVelocity = ( cR * massB*( velB - velA ) + massA * velA + massB * velB ) / totalMass;
+		bodyB->mVelocity = ( cR * massB*( velA - velB ) + massB * velB + massA * velA ) / totalMass;
 
 		//mIntegrator.RK4( sphereBodyA->mPosition, sphereBodyA->mVeloity, sphereBodyA - mAcceleration, mGravity, mDt*( 1.f - t ) );
 		//mIntegrator.RK4( sphereBodyB->mPosition, sphereBodyB->mVeloity, sphereBodyB - mAcceleration, mGravity, mDt*( 1.f - t ) );

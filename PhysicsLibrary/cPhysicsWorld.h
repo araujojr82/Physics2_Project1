@@ -4,6 +4,7 @@
 #include <vector>
 #include "cRigidBody.h"
 #include "shapes.h"
+#include "cIntegration.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp> // <- This includes vec3 and mat4
@@ -23,6 +24,8 @@ namespace nPhysics
 		virtual bool Collide( cRigidBody* bodyA, cRigidBody* bodyB );
 		virtual bool CollideSpherePlane( cRigidBody* bodyA, cSphereShape* sphereA, cRigidBody* bodyB, cPlaneShape* planeB );
 		virtual bool CollideSphereSphere( cRigidBody* bodyA, cSphereShape* sphereA, cRigidBody* bodyB, cSphereShape* sphereB );
+
+		cIntegration myIntegrator;
 
 	private:
 		
