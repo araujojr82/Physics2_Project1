@@ -509,7 +509,7 @@ int main( void )
 
 		// Physics Calculation
 		//PhysicsStep( deltaTime );
-		//::g_pThePhysicsWorld->TimeStep( deltaTime );
+		::g_pThePhysicsWorld->TimeStep( deltaTime );
 		
 		lastTimeStep = curTime;
 
@@ -688,7 +688,18 @@ void loadObjectsFile( std::string fileName )
 				pTempGO->textureBlend[0] = 1.0f;
 				pTempGO->textureNames[0] = "Rough_rock_014_COLOR.bmp";
 
-				newBody = ::g_pThePhysicsFactory->CreateRigidBody( theDesc, g_pThePhysicsFactory->CreatePlane( glm::vec3( ), NULL ) );
+				cMesh tempMesh;
+				::g_pVAOManager->lookupMeshFromName( pTempGO->meshName, tempMesh );
+
+				glm::vec3 planeNormal = glm::vec3( tempMesh.pVertices[tempMesh.pTriangles[0].vertex_ID_0].nx,
+												   tempMesh.pVertices[tempMesh.pTriangles[0].vertex_ID_0].ny,
+												   tempMesh.pVertices[tempMesh.pTriangles[0].vertex_ID_0].nz );
+
+				planeNormal = glm::normalize( planeNormal );
+
+				float planeConst = glm::dot( planeNormal, theDesc.Position );
+
+				newBody = ::g_pThePhysicsFactory->CreateRigidBody( theDesc, g_pThePhysicsFactory->CreatePlane( planeNormal, planeConst ) );
 			}
 
 			::g_pThePhysicsWorld->AddRigidBody( newBody );
@@ -754,7 +765,7 @@ void loadMeshesFile( std::string fileName, GLint ShaderID )
 		}
 		else
 		{
-			if( !::g_pVAOManager->loadMeshIntoVAO( testMesh, ShaderID ) )
+			if( !::g_pVAOManager->loadMeshIntoVAO( testMesh, ShaderID, true ) )
 			{
 				std::cout << "Could not load mesh into VAO" << std::endl;
 			}

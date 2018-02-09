@@ -142,12 +142,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cIntegration.cpp" />
     <ClCompile Include="cPhysicsFactory.cpp" />
     <ClCompile Include="cPhysicsWorld.cpp" />
     <ClCompile Include="cRigidBody.cpp" />
     <ClCompile Include="shapes.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cIntegration.h" />
+    <ClInclude Include="CollisionDetection.h" />
     <ClInclude Include="cPhysicsFactory.h" />
     <ClInclude Include="cPhysicsWorld.h" />
     <ClInclude Include="cRigidBody.h" />

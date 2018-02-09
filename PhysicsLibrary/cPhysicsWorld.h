@@ -3,6 +3,10 @@
 #include <iPhysicsWorld.h>
 #include <vector>
 #include "cRigidBody.h"
+#include "shapes.h"
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp> // <- This includes vec3 and mat4
 
 namespace nPhysics
 {
@@ -17,8 +21,8 @@ namespace nPhysics
 		virtual void RemoveRigidBody(iRigidBody* rigidBody);
 
 		virtual bool Collide( cRigidBody* bodyA, cRigidBody* bodyB );
-		//virtual bool CollideSpherePlane( cRigidBody* bodyA, cSphereRigidBody* sphereA, cRigidBody* bodyB, cPlaneRigidBody* planeB );
-		//virtual bool CollideSphereSphere( cRigidBody* bodyA, cSphereRigidBody* sphereA, cRigidBody* bodyB, cSphereRigidBody* sphereB );
+		virtual bool CollideSpherePlane( cRigidBody* bodyA, cSphereShape* sphereA, cRigidBody* bodyB, cPlaneShape* planeB );
+		virtual bool CollideSphereSphere( cRigidBody* bodyA, cSphereShape* sphereA, cRigidBody* bodyB, cSphereShape* sphereB );
 
 	private:
 		
