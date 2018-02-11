@@ -24,8 +24,9 @@ namespace nPhysics
 		virtual void GetRotation(glm::vec3& rotationOut);
 
 		virtual void SetTransform( glm::mat4 transformIn );
-		virtual void SetPosition( glm::vec3 positionOut );
-		virtual void SetRotation( glm::vec3 rotationOut );
+		virtual void SetPosition( glm::vec3 positionIn );
+		virtual void SetVelocity( glm::vec3 velocityIn );
+		virtual void SetRotation( glm::vec3 rotationIn );
 
 		virtual void ApplyForce( glm::vec3 force );
 		virtual void ApplyForceAtPoint( glm::vec3 force, glm::vec3 velocity );

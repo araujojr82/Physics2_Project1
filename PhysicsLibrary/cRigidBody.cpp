@@ -44,6 +44,12 @@ namespace nPhysics
 		velocityOut = mVelocity;
 	}
 
+	void cRigidBody::SetVelocity( glm::vec3 velocityIn )
+	{
+		mVelocity = velocityIn;
+		return;
+	}
+
 	void cRigidBody::GetRotation(glm::vec3& rotationOut)
 	{
 		rotationOut = glm::eulerAngles(mRotation);

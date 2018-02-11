@@ -61,7 +61,7 @@ std::string libraryFile = "PhysicsLibrary.dll";
 //int g_GameObjNumber = 0;				// game object vector position number 
 //int g_LightObjNumber = 0;				// light object vector position
 
-int g_selectedSphere = NULL;
+int g_selectedSphere = -1;
 
 int g_NUMBER_OF_LIGHTS = 1;
 
@@ -665,6 +665,9 @@ void loadObjectsFile( std::string fileName )
 				::g_pVAOManager->lookupMeshFromName( "ball", tempMesh );
 				float radius = tempMesh.maxExtent / 2 * pTempGO->scale;
 
+				theDesc.Mass = allObjects[index].scale;
+				theDesc.invMass = theDesc.Mass;
+
 				newBody = ::g_pThePhysicsFactory->CreateRigidBody( theDesc, ::g_pThePhysicsFactory->CreateSphere( radius ) );
 			}
 			else
@@ -683,6 +686,9 @@ void loadObjectsFile( std::string fileName )
 				planeNormal *= glm::vec3( -1.0, -1.0, -1.0 );
 
 				float planeConst = glm::dot( theDesc.Position, planeNormal );
+
+				theDesc.Mass = 0.0f;
+				theDesc.invMass = 0.0f;
 
 				newBody = ::g_pThePhysicsFactory->CreateRigidBody( theDesc, g_pThePhysicsFactory->CreatePlane( planeNormal, planeConst ) );
 			}

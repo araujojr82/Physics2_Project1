@@ -2,6 +2,7 @@
 //#include <glm\game_math.h>
 //#include <Physics\Interfaces\iShape.h>
 
+#include <vector>
 #include <iShape.h>
 
 namespace nPhysics

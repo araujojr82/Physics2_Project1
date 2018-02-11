@@ -23,7 +23,6 @@ inline glm::vec3 closest_point_on_plane( const glm::vec3& point, const glm::vec3
 // returns true/false whether the sphere collides with the plane in [c, c + v]
 inline int intersect_moving_sphere_plane( const glm::vec3& c, float r, const glm::vec3& v, const glm::vec3& n, float d, float& t, glm::vec3& q )
 {
-	//float dist = glm::distance( n, c ) - d;	
 	float dist = dot( n, c ) - d;
 	if( abs( dist ) <= r )
 	{

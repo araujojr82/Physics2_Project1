@@ -22,6 +22,7 @@ namespace nPhysics
 		virtual void SetRotation( glm::vec3 rotationOut ) = 0;
 
 		virtual void GetVelocity( glm::vec3& velocityOut ) = 0;
+		virtual void SetVelocity( glm::vec3 velocityIn ) = 0;
 
 		virtual void ApplyForce( glm::vec3 force ) = 0;
 		virtual void ApplyForceAtPoint( glm::vec3 force, glm::vec3 velocity ) = 0;

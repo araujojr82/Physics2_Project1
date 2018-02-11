@@ -7,31 +7,59 @@ bool isShiftKeyDown( int mods, bool bByItself = true );
 bool isCtrlKeyDown( int mods, bool bByItself = true );
 bool isAltKeyDown( int mods, bool bByItself = true );
 
-bool findNextObject( int &currentObject )
+bool findNextObject()
 {
-	int i;
-	if( currentObject == NULL )
+	bool found = false;
+	int i = 0;
+	if( ::g_selectedSphere == -1 )
 	{
 		i = 0;
 	}		
 	else
 	{
-		int i = currentObject + 1;	// The next Object after the Current
-		if( i > ::g_vecGameObjects.size() ) i = 0;
-	}
-
-	for( ; i != ::g_vecGameObjects.size(); i++ )
-	{
-		if( ::g_vecGameObjects[i]->meshName != "ball" ) 
-			continue;
-		else
+		i = ::g_selectedSphere + 1;	// The next Object after the Current
+		if( i > ::g_vecGameObjects.size() )
 		{
-			currentObject = i;
-			return true;
-			//break;
+			i = 0;
 		}
 	}
+	
+	while( !found )
+	{
+		for( ; i != ::g_vecGameObjects.size(); i++ )
+		{
+			if( ::g_vecGameObjects[i]->meshName == "ball" )
+			{
+				::g_selectedSphere = i;
+				found = true;
+				break;
+			}
+		}
+		i = 0;
+	}
+
+	if( found ) return true;
+	
 	return false;
+}
+
+void setSpheresColor()
+{
+	for( int i = 0; i != ::g_vecGameObjects.size(); i++ )
+	{
+		if( i == ::g_selectedSphere )
+		{
+			::g_vecGameObjects[i]->textureBlend[0] = 0.0f;
+			::g_vecGameObjects[i]->textureBlend[1] = 1.0f;
+		}
+		else
+		{
+			::g_vecGameObjects[i]->textureBlend[0] = 1.0f;
+			::g_vecGameObjects[i]->textureBlend[1] = 0.0f;
+		}
+		
+	}
+	return;
 }
 
 /*static*/ void key_callback( GLFWwindow* window, int key, int scancode, int action, int mods )
@@ -42,23 +70,17 @@ bool findNextObject( int &currentObject )
 	if( key == GLFW_KEY_SPACE && action == GLFW_PRESS )
 	{	
 		if( ::g_selectedSphere == NULL )
-			findNextObject( ::g_selectedSphere );
+			findNextObject();
 
-		if( ::g_vecGameObjects[::g_selectedSphere]->textureBlend[0] == 1.0f )
-		{
-			::g_vecGameObjects[::g_selectedSphere]->textureBlend[0] = 0.0f;
-			::g_vecGameObjects[::g_selectedSphere]->textureBlend[1] = 1.0f;
-		}		
-		else
-		{
-			::g_vecGameObjects[::g_selectedSphere]->textureBlend[0] = 1.0f;
-			::g_vecGameObjects[::g_selectedSphere]->textureBlend[1] = 0.0f;
-		}	
+		setSpheresColor();
+
 	}
 
 	if( key == GLFW_KEY_TAB && action == GLFW_PRESS )
 	{
-		findNextObject( ::g_selectedSphere );
+		findNextObject();
+		setSpheresColor();
+		std::cout << "selected sphere :" << ::g_selectedSphere << std::endl;
 	}
 	
 	if( key == GLFW_KEY_ENTER && action == GLFW_PRESS )
@@ -237,21 +259,25 @@ bool findNextObject( int &currentObject )
 	case GLFW_KEY_UP:
 		//pTheBall->position += glm::vec3( 0.0f, -0.1f, 0.0f );
 		//pTheBall->vel += glm::vec3( 0.0f, -0.5f, 0.0f );
+		::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.0f, -0.1f, 0.0f ) );
 		break;
 
 	case GLFW_KEY_DOWN:
 		//pTheBall->position += glm::vec3( 0.0f, +0.1f, 0.0f );
 		//pTheBall->vel += glm::vec3( 0.0f, +0.5f, 0.0f );
+		::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.0f, 0.1f, 0.0f ) );
 		break;
 
 	case GLFW_KEY_LEFT:
 		//pTheBall->position += glm::vec3( -0.1f, 0.0f, 0.0f ) ;
 		//pTheBall->vel += glm::vec3( -0.5f, 0.0f, 0.0f );
+		::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( -0.1f, 0.0f, 0.0f ) );
 		break;
 
 	case GLFW_KEY_RIGHT:
 		//pTheBall->position += glm::vec3( 0.1f, 0.0f, 0.0f );
 		//pTheBall->vel += glm::vec3( 0.5f, 0.0f, 0.0f );
+		::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.1f, 0.0f, 0.0f ) );
 		break;
 
 	//case GLFW_KEY_9:
