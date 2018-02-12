@@ -1,41 +1,30 @@
-Graphics Midterm 
+Physics 2 Project 1 
+
+Please compile it in 64 bits
 
 Author: Euclides Araujo
 
-PLEASE DON'T CHANGE THE VIPER AND RIDER MODELS!!
-Feel free to change the Battlestar Galactica model as you wish.
-
 User input keys:
-Numbers 1-5: Select fixed cameras in the scene;
-C Key: Change the camera over the “bridge” of the Galactica. (QUESTION 03)
-P Key: Change the target of the "bridge" camera. (QUESTION 03)
-SPACE: Start/Stop Moving the Raiders towards the Galactica. (QUESTION 04)
-V Key: Place the Vipers (on each time) behind the left landing bay. (QUESTION 05)
-ENTER: Hold to move the chosen Viper to the landing pod until its final position. (QUESTION 05)
-
-W,A,S,D,Q,E: Controls the camera position;
+W,A,S,D,Q,E: Controls the camera position; NOT THE BALL
+UP, DOWN, LEFT and RIGHT arrows: Control the selected ball 
+TAB: Change the selected ball
+ENTER: Enter the debug mode
 
 
-Config is divided in 3 files, the config.txt has the interface options, 
-while the meshlist.txt. and objects.txt holds the meshes and objects, 
-both uses spaces to separate the properties.
+Configuration of the scene is done via the objects.txt file.
+Each line can create 1 object in the scene, the line structure is:
+meshname posX posY posZ scale mass
 
-meshlist.txt is composed of 1 mesh per line, and the line structure is:
-meshname  name_of_the_mesh_file1.ply
+Meshname is String pointing to the corresponding mesh in the meshlist.txt
+The other values are float
 
+meshname	  X    Y    Z  SCALE MASS
 example:
-virus1    virus_super_low_res_XYZ.ply
-asteroid1 asteroid_xyz.ply
-
-objects.txt is composed of lines for each meshtipe, 
-each line can create 1 or more objects in the game, the line structure is:
-
-meshname number_of_objects posX posY posZ scale isRandom? rangeX rangeY rangeZ rangeScale
-
-example:
-asteroid1 1 2.0 -3.0 -2.0 1.0 false 0.0 0.0 0.0 0.0
-asteroid2 10 0.0 0.0 0.0 0.0 true 10.0 10.0 10.0 2.0
-
-Line 1 will insert 1 object of the mesh type asteroid1 at the positonXYZ 2.0, -3.0, -2.0 with scale 1.0.
-Line 2 will insert 10 objects of the type asteroid 2 at a random position of XYZ from -10.0 to 10.0 
-for each cordinate with a random scale of 0.0 to 2.0
+ball		 0.0  0.0  7.0  1.5  7.5
+ball		-3.0 -3.0  7.0  1.2  6.0
+ball		 3.0  3.0  7.0  1.0  5.0
+floor_plane	 0.0  0.0  0.0  4.0  0.0
+north_plane	 0.0  4.0  0.0  4.0  0.0
+south_plane	 0.0 -4.0  0.0  4.0  0.0
+left_plane	-4.0  0.0  0.0  4.0  0.0
+right_plane	 4.0  0.0  0.0  4.0  0.0

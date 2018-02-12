@@ -212,9 +212,9 @@ void setSpheresColor()
 		{	
 			glm::vec3 target;
 			::g_vecGameObjects[g_selectedSphere]->rigidBody->GetPosition( target );				
-
 			glm::vec3 angle = target - ::g_pTheMouseCamera->Position;
 			angle = glm::normalize( angle );
+			angle *= ( 0.1f );
 
 			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( angle );
 			//::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.0f, -forceToApply, 0.0f ) );
@@ -226,14 +226,13 @@ void setSpheresColor()
 		{
 			glm::vec3 target;
 			::g_vecGameObjects[g_selectedSphere]->rigidBody->GetPosition( target );
-
 			glm::vec3 angle = target - ::g_pTheMouseCamera->Position;
 			angle = glm::normalize( angle );
+			angle *= ( 0.1f );
 
 			angle *= ( -1.0f );
-			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( angle );
 
-			//::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.0f, forceToApply, 0.0f ) );
+			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( angle );
 		}
 		break;
 
@@ -242,19 +241,19 @@ void setSpheresColor()
 		{
 			glm::vec3 target;
 			::g_vecGameObjects[g_selectedSphere]->rigidBody->GetPosition( target );
-
 			glm::vec3 angle = target - ::g_pTheMouseCamera->Position;
 			angle = glm::normalize( angle );
 
-			angle = glm::cross( angle, glm::vec3( 1.0f, 1.0f, 0.0f ) );
-
-			//float temp = angle.x;
-			//angle.x = angle.y;
-			//angle.y = temp;
+			float theta = glm::radians( 90.0f );
+			float cs = cos( theta );
+			float sn = sin( theta );
+			glm::vec3 rotateAngle = glm::vec3( 0.0f );
+			rotateAngle.x = angle.x * cs - angle.y * sn;
+			rotateAngle.y = angle.x * sn + angle.y * cs;
+			angle = rotateAngle;
+			angle *= ( 0.1f );
 
 			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( angle );
-
-			//::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( forceToApply, 0.0f, 0.0f ) );
 		}		
 		break;
 
@@ -263,19 +262,19 @@ void setSpheresColor()
 		{
 			glm::vec3 target;
 			::g_vecGameObjects[g_selectedSphere]->rigidBody->GetPosition( target );
-
 			glm::vec3 angle = target - ::g_pTheMouseCamera->Position;
 			angle = glm::normalize( angle );
 
-			angle = glm::cross( angle, glm::vec3( -1.0f, -1.0f, 0.0f ) );
+			float theta = glm::radians( -90.0f );
+			float cs = cos( theta );
+			float sn = sin( theta );
+			glm::vec3 rotateAngle = glm::vec3( 0.0f );
+			rotateAngle.x = angle.x * cs - angle.y * sn;
+			rotateAngle.y = angle.x * sn + angle.y * cs;
+			angle = rotateAngle;
+			angle *= ( 0.1f );
 
-			//angle *= ( -1.0f );
-			//float temp = angle.x;
-			//angle.x = angle.y;
-			//angle.y = temp;
-
-			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( angle );
-			//::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( -forceToApply, 0.0f, 0.0f ) );
+			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( angle );			
 		}
 		break;
 
