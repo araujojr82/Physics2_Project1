@@ -171,9 +171,6 @@
     </ClCompile>
     <ClCompile Include="cVAOMeshManager.cpp" />
     <ClCompile Include="Physics.cpp" />
-    <ClCompile Include="Physics\AABB_triangles.cpp" />
-    <ClCompile Include="Physics\cAABBBroadPhase.cpp" />
-    <ClCompile Include="Physics\cAABBv2.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="Texture\C24BitBMPpixel.cpp" />
     <ClCompile Include="Texture\cBasicTextureManager.cpp" />
@@ -194,9 +191,6 @@
     <ClInclude Include="iDebugRenderer.h" />
     <ClInclude Include="ModelUtilities.h" />
     <ClInclude Include="Physics.h" />
-    <ClInclude Include="Physics\AABB_triangles.h" />
-    <ClInclude Include="Physics\cAABBBroadPhase.h" />
-    <ClInclude Include="Physics\cAABBv2.h" />
     <ClInclude Include="sVAOInfo.h" />
     <ClInclude Include="sVertex_xyz_rgba_n_uv2_bt.h" />
     <ClInclude Include="Texture\C24BitBMPpixel.h" />

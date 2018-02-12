@@ -349,7 +349,7 @@ int main( void )
 	
 	//::g_pTheMouseCamera = new cMouseCamera( glm::vec3( 5.0f, 5.0f, 3.0f ) );
 	//::g_pTheMouseCamera = new cMouseCamera( glm::vec3( 5.0f, 5.0f, 3.0f ), glm::vec3( 0.0f, 0.0f, 1.0f ), -90.f, 0.f );
-	::g_pTheMouseCamera = new cMouseCamera( glm::vec3( 4.0f, 4.0f, 4.0f ), glm::vec3( 0.0f, 0.0f, 1.0f ), -135.f, -32.f );
+	::g_pTheMouseCamera = new cMouseCamera( glm::vec3( 12.0f, 12.0f, 12.0f ), glm::vec3( 0.0f, 0.0f, 1.0f ), -135.f, -32.f );
 
 	//std::cout << "Camera Pos: "
 	//	<< ::g_pTheMouseCamera->Position.x << ", "

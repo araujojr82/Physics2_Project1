@@ -87,39 +87,13 @@ void setSpheresColor()
 	{
 		::bIsWireframe = !::bIsWireframe;
 	}
-
-	//cGameObject* pTheBall = findObjectByFriendlyName( THEBALLNAME, ::g_vecGameObjects );
-
+	
 	const float CAMERASPEED = 0.1f;
 
 	const float CAM_ACCELL_THRUST = 100.0f;
 
-	//	const float CAMERASPEED = 100.0f;
 	switch( key )
 	{
-
-	//case GLFW_KEY_N:
-	//	if( pTheBall )
-	//	{
-	//		pTheBall->textureBlend[0] -= 0.01f;
-	//		if( pTheBall->textureBlend[0] <= 0.0f )
-	//		{
-	//			pTheBall->textureBlend[0] = 0.0f;
-	//		}
-	//		pTheBall->textureBlend[1] = 1.0f - pTheBall->textureBlend[0];
-	//	}
-	//	break;
-	//case GLFW_KEY_M:
-	//	if( pTheBall )
-	//	{
-	//		pTheBall->textureBlend[0] += 0.01f;
-	//		if( pTheBall->textureBlend[0] > 1.0f )
-	//		{
-	//			pTheBall->textureBlend[0] = 1.0f;
-	//		}
-	//		pTheBall->textureBlend[1] = 1.0f - pTheBall->textureBlend[0];
-	//	}
-	//	break;
 
 	// CAMERA and lighting
 	case GLFW_KEY_A:		// Left
@@ -231,63 +205,33 @@ void setSpheresColor()
 		}
 		break;
 
-	//case GLFW_KEY_1:
-	//	::g_pLightManager->vecLights[0].attenuation.y *= 0.99f;	// less 1%
-	//	std::cout << "Y Attenuation = " << ::g_pLightManager->vecLights[0].attenuation.y << std::endl;
-	//	break;
-	//case GLFW_KEY_2:
-	//	::g_pLightManager->vecLights[0].attenuation.y *= 1.01f; // more 1%
-	//	if( ::g_pLightManager->vecLights[0].attenuation.y <= 0.0f )
-	//	{
-	//		::g_pLightManager->vecLights[0].attenuation.y = 0.001f;	// Some really tiny value
-	//	}
-	//	std::cout << "Y Attenuation = " << ::g_pLightManager->vecLights[0].attenuation.y << std::endl;
-	//	break;
-	//case GLFW_KEY_3:	// Quad
-	//	::g_pLightManager->vecLights[0].attenuation.z *= 0.99f;	// less 1%
-	//	std::cout << "Z Attenuation = " << ::g_pLightManager->vecLights[0].attenuation.z << std::endl;
-	//	break;
-	//case GLFW_KEY_4:	//  Quad
-	//	::g_pLightManager->vecLights[0].attenuation.z *= 1.01f; // more 1%
-	//	if( ::g_pLightManager->vecLights[0].attenuation.z <= 0.0f )
-	//	{
-	//		::g_pLightManager->vecLights[0].attenuation.z = 0.001f;	// Some really tiny value
-	//	}
-	//	std::cout << "Z Attenuation = " << ::g_pLightManager->vecLights[0].attenuation.z << std::endl;
-	//	break;
-
 	case GLFW_KEY_UP:
-		//pTheBall->position += glm::vec3( 0.0f, -0.1f, 0.0f );
-		//pTheBall->vel += glm::vec3( 0.0f, -0.5f, 0.0f );
-		::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.0f, -0.1f, 0.0f ) );
+		if( ::g_selectedSphere != -1 )
+		{
+			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.0f, -0.1f, 0.0f ) );
+		}
 		break;
 
 	case GLFW_KEY_DOWN:
-		//pTheBall->position += glm::vec3( 0.0f, +0.1f, 0.0f );
-		//pTheBall->vel += glm::vec3( 0.0f, +0.5f, 0.0f );
-		::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.0f, 0.1f, 0.0f ) );
+		if( ::g_selectedSphere != -1 )
+		{
+			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.0f, 0.1f, 0.0f ) );
+		}
 		break;
 
 	case GLFW_KEY_LEFT:
-		//pTheBall->position += glm::vec3( -0.1f, 0.0f, 0.0f ) ;
-		//pTheBall->vel += glm::vec3( -0.5f, 0.0f, 0.0f );
-		::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( -0.1f, 0.0f, 0.0f ) );
+		if( ::g_selectedSphere != -1 )
+		{
+			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.1f, 0.0f, 0.0f ) );
+		}		
 		break;
 
 	case GLFW_KEY_RIGHT:
-		//pTheBall->position += glm::vec3( 0.1f, 0.0f, 0.0f );
-		//pTheBall->vel += glm::vec3( 0.5f, 0.0f, 0.0f );
-		::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.1f, 0.0f, 0.0f ) );
+		if( ::g_selectedSphere != -1 )
+		{
+			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( -0.1f, 0.0f, 0.0f ) );
+		}
 		break;
-
-	//case GLFW_KEY_9:
-	//	//pTheBall->position += glm::vec3( 0.0f, 0.0f, +0.1f );
-	//	pTheBall->vel += glm::vec3( 0.0f, 0.0f, +0.5f );
-	//	break;
-	//case GLFW_KEY_0:
-	//	//pTheBall->position += glm::vec3( 0.0f, 0.0f, -0.1f );
-	//	pTheBall->vel += glm::vec3( 0.0f, 0.0f, -0.5f );
-	//	break;
 
 	}
 

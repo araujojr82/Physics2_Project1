@@ -1,4 +1,4 @@
-ball		1  0.0  0.0 1.0 1.0 false 0.0 0.0 0.0 0.0
+ball		1  0.0 0.0 2.0 1.0 false 0.0 0.0 0.0 0.0
 floor_plane	1 0.0 0.0 0.0 1.0 false 0.0 0.0 0.0 0.0
 north_plane	1 0.0 1.0 0.0 1.0 false 0.0 0.0 0.0 0.0
 south_plane	1 0.0 -1.0 0.0 1.0 false 0.0 0.0 0.0 0.0

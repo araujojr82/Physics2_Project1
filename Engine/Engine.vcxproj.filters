@@ -25,9 +25,6 @@
     <Filter Include="Camera">
       <UniqueIdentifier>{0b33d9fa-686b-4fa9-a7fc-161eab405656}</UniqueIdentifier>
     </Filter>
-    <Filter Include="AABB">
-      <UniqueIdentifier>{a06295de-0878-4152-b267-801057d0e0a8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="DebugRenderer">
       <UniqueIdentifier>{6bb90eed-45d7-4e2a-8234-1eae19a0fe20}</UniqueIdentifier>
     </Filter>
@@ -84,15 +81,6 @@
     <ClCompile Include="GLFW_keyboardCallback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Physics\AABB_triangles.cpp">
-      <Filter>AABB</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\cAABBBroadPhase.cpp">
-      <Filter>AABB</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\cAABBv2.cpp">
-      <Filter>AABB</Filter>
-    </ClCompile>
     <ClCompile Include="cDebugRenderer.cpp">
       <Filter>DebugRenderer</Filter>
     </ClCompile>
@@ -148,15 +136,6 @@
     </ClInclude>
     <ClInclude Include="globalGameStuff.h">
       <Filter>Global</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\AABB_triangles.h">
-      <Filter>AABB</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\cAABBBroadPhase.h">
-      <Filter>AABB</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\cAABBv2.h">
-      <Filter>AABB</Filter>
     </ClInclude>
     <ClInclude Include="sVAOInfo.h">
       <Filter>Header Files</Filter>
