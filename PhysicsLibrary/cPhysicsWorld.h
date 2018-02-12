@@ -28,8 +28,8 @@ namespace nPhysics
 		virtual sCollisionManifold FindColSpherePlane( cRigidBody* bodyA, cSphereShape* sphereA, cRigidBody* bodyB, cPlaneShape* planeB );
 		virtual void SolveCollision( cRigidBody* m1, cRigidBody* m2, sCollisionManifold collisionResult, int j );
 
-		virtual bool CollideSpherePlane( cRigidBody* bodyA, cSphereShape* sphereA, cRigidBody* bodyB, cPlaneShape* planeB, float result, float deltaTime );
-		virtual bool CollideSphereSphere( cRigidBody* bodyA, cSphereShape* sphereA, cRigidBody* bodyB, cSphereShape* sphereB, float deltaTime );		
+		virtual bool CollideSpherePlane( cRigidBody* bodyA, cSphereShape* sphereA, cRigidBody* bodyB, cPlaneShape* planeB );
+		virtual bool CollideSphereSphere( cRigidBody* bodyA, cSphereShape* sphereA, cRigidBody* bodyB, cSphereShape* sphereB );
 
 		cIntegration myIntegrator;
 
@@ -40,8 +40,6 @@ namespace nPhysics
 		std::vector<cRigidBody*> vecColliders1;
 		std::vector<cRigidBody*> vecColliders2;
 
-		//std::vector<std::pair<cRigidBody*, cRigidBody*>> collidingPairs;
-		
 		std::vector<cRigidBody*> mRigidBody;
 	};
 }

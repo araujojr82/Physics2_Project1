@@ -11,8 +11,8 @@ namespace nPhysics
 			, Velocity( 0.f, 0.f, 0.f)
 			, Rotation( 0.f, 0.f, 0.f )
 			, Acceleration( 0.f, 0.f, 0.f )
-			, Mass( 1.f )
-			, invMass( 1 / Mass )
+			, Mass( 0.f )
+			, invMass( 0.f )
 		{
 
 		}

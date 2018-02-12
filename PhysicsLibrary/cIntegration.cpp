@@ -31,11 +31,13 @@ void cIntegration::RK4( glm::vec3& pos, glm::vec3& vel, glm::vec3& acc, float dt
 	glm::vec3 rkVel = ( a.Pos + ( ( b.Pos + c.Pos )*2.0f ) + d.Pos ) * ( 1.0f / 6.0f );
 	glm::vec3 rkAcc = ( a.Vel + ( ( b.Vel + c.Vel )*2.0f ) + d.Vel ) * ( 1.0f / 6.0f );
 
-	//rkVel = rkVel * 0.98f;
 	pos += rkVel * dt;
 	vel += rkAcc * dt;
-	//vel = vel * 0.98f;
 
+	// Slow down just a little
+	vel = vel * 0.98f;	
+
+	// Check if the ball is almost stopping and stop it
 	if( fabsf( vel.x ) < 0.01f ) {
 		vel.x = 0.0f;
 	}

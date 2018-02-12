@@ -77,8 +77,7 @@ namespace nPhysics
 
 	void cRigidBody::ApplyForce( glm::vec3 force )
 	{
-		mAcceleration += force * mInvMass;
-		
+		mAcceleration += force * mMass;
 	}
 
 	void cRigidBody::ApplyForceAtPoint( glm::vec3 force, glm::vec3 velocity )
@@ -89,7 +88,7 @@ namespace nPhysics
 
 	void cRigidBody::ApplyImpulse( glm::vec3 impulse )
 	{
-		mVelocity += impulse * mInvMass;
+		mVelocity += impulse * mMass;
 	}
 
 	void cRigidBody::ApplyImpulseAtPoint( glm::vec3 impulse, glm::vec3 relativePoint )

@@ -7,6 +7,8 @@ bool isShiftKeyDown( int mods, bool bByItself = true );
 bool isCtrlKeyDown( int mods, bool bByItself = true );
 bool isAltKeyDown( int mods, bool bByItself = true );
 
+float forceToApply = 0.2f;
+
 bool findNextObject()
 {
 	bool found = false;
@@ -207,29 +209,73 @@ void setSpheresColor()
 
 	case GLFW_KEY_UP:
 		if( ::g_selectedSphere != -1 )
-		{
-			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.0f, -0.1f, 0.0f ) );
+		{	
+			glm::vec3 target;
+			::g_vecGameObjects[g_selectedSphere]->rigidBody->GetPosition( target );				
+
+			glm::vec3 angle = target - ::g_pTheMouseCamera->Position;
+			angle = glm::normalize( angle );
+
+			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( angle );
+			//::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.0f, -forceToApply, 0.0f ) );
 		}
 		break;
 
 	case GLFW_KEY_DOWN:
 		if( ::g_selectedSphere != -1 )
 		{
-			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.0f, 0.1f, 0.0f ) );
+			glm::vec3 target;
+			::g_vecGameObjects[g_selectedSphere]->rigidBody->GetPosition( target );
+
+			glm::vec3 angle = target - ::g_pTheMouseCamera->Position;
+			angle = glm::normalize( angle );
+
+			angle *= ( -1.0f );
+			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( angle );
+
+			//::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.0f, forceToApply, 0.0f ) );
 		}
 		break;
 
 	case GLFW_KEY_LEFT:
 		if( ::g_selectedSphere != -1 )
 		{
-			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( 0.1f, 0.0f, 0.0f ) );
+			glm::vec3 target;
+			::g_vecGameObjects[g_selectedSphere]->rigidBody->GetPosition( target );
+
+			glm::vec3 angle = target - ::g_pTheMouseCamera->Position;
+			angle = glm::normalize( angle );
+
+			angle = glm::cross( angle, glm::vec3( 1.0f, 1.0f, 0.0f ) );
+
+			//float temp = angle.x;
+			//angle.x = angle.y;
+			//angle.y = temp;
+
+			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( angle );
+
+			//::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( forceToApply, 0.0f, 0.0f ) );
 		}		
 		break;
 
 	case GLFW_KEY_RIGHT:
 		if( ::g_selectedSphere != -1 )
 		{
-			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( -0.1f, 0.0f, 0.0f ) );
+			glm::vec3 target;
+			::g_vecGameObjects[g_selectedSphere]->rigidBody->GetPosition( target );
+
+			glm::vec3 angle = target - ::g_pTheMouseCamera->Position;
+			angle = glm::normalize( angle );
+
+			angle = glm::cross( angle, glm::vec3( -1.0f, -1.0f, 0.0f ) );
+
+			//angle *= ( -1.0f );
+			//float temp = angle.x;
+			//angle.x = angle.y;
+			//angle.y = temp;
+
+			::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( angle );
+			//::g_vecGameObjects[::g_selectedSphere]->rigidBody->ApplyImpulse( glm::vec3( -forceToApply, 0.0f, 0.0f ) );
 		}
 		break;
 

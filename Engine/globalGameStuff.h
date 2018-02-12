@@ -40,6 +40,6 @@ extern cLightManager*	g_pLightManager;	// (theMain.cpp)
 												//extern cGameObject* pTP0;
 const std::string THEBALLNAME = "ball";			// Now that we have a lookup
 
-//extern cMouseCamera* g_pTheMouseCamera;		// (theMain.cpp)
+extern cMouseCamera* g_pTheMouseCamera;		// (theMain.cpp)
 
 #endif

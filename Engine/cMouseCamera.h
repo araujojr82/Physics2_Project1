@@ -20,7 +20,7 @@ enum Camera_Movement {
 // Default camera values
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
-const float SPEED = 2.5f;
+const float SPEED = 50.0f;
 const float SENSITIVTY = 0.1f;
 const float ZOOM = 45.0f;
 
@@ -131,7 +131,6 @@ public:
 			Zoom = 45.0f;
 	}
 
-private:
 	// Calculates the front vector from the Camera's (updated) Eular Angles
 	void updateCameraVectors()
 	{
@@ -144,8 +143,11 @@ private:
 		// Also re-calculate the Right and Up vector
 		// Normalize the vectors, because their length gets closer to 0
 		// the more you look up or down which results in slower movement.
-		Right = glm::normalize( glm::cross( Front, WorldUp ) );  
-		Up = glm::normalize( glm::cross( Right, Front ) );		 
+		Right = glm::normalize( glm::cross( Front, WorldUp ) );
+		Up = glm::normalize( glm::cross( Right, Front ) );
 	}
+
+private:
+
 };
 #endif

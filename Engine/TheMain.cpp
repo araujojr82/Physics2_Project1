@@ -9,6 +9,9 @@
 #include <glm/gtc/type_ptr.hpp>			// glm::value_ptr
 #include <glm/gtc/quaternion.hpp>
 
+//#define GLM_ENABLE_EXPERIMENTAL
+//#include <glm/gtx/vector_angle.hpp>
+
 #include <stdlib.h>
 #include <stdio.h>
 // Add the file stuff library (file stream>
@@ -62,6 +65,7 @@ std::string libraryFile = "PhysicsLibrary.dll";
 //int g_LightObjNumber = 0;				// light object vector position
 
 int g_selectedSphere = -1;
+glm::vec3 prevPosition = glm::vec3( 0.0f );
 
 int g_NUMBER_OF_LIGHTS = 1;
 
@@ -111,10 +115,7 @@ public:
 struct sGOparameters		// for the Game Objects' input file
 {
 	std::string meshname;
-	int nObjects;
-	float x, y, z, scale;
-	std::string random;
-	float rangeX, rangeY, rangeZ, rangeScale;
+	float x, y, z, scale, mass;
 };
 
 struct sMeshparameters		// for the Meshes' input file
@@ -317,19 +318,12 @@ int main( void )
 
 	::g_pLightManager->CreateLights( g_NUMBER_OF_LIGHTS );	// There are 10 lights in the shader
 	// Change ZERO (the SUN) light position
-	::g_pLightManager->vecLights[0].position = glm::vec3( 0.0f, 0.0f, 2.0f );
-	::g_pLightManager->vecLights[0].attenuation.y = 1.0f;		// Change the linear attenuation
-	::g_pLightManager->vecLights[0].attenuation.z = 0.2f;		
+	::g_pLightManager->vecLights[0].position = glm::vec3( 0.0f, 0.0f, 8.0f );
+	::g_pLightManager->vecLights[0].attenuation.y = 0.6f;		// Change the linear attenuation
+	::g_pLightManager->vecLights[0].attenuation.z = 0.005f;		
 
-	// Change Other lights parameters==========================
-	{
-		//::g_pLightManager->vecLights[1].position = glm::vec3( 0.0f, 0.0f, 50.0f );
-		//::g_pLightManager->vecLights[1].attenuation.y = 0.0017f;
-	}
-	//=========================================================
 	::g_pLightManager->LoadShaderUniformLocations( currentProgID );
 
-	//loadLightObjects();
 
 	// Texture 
 	::g_pTextureManager = new cBasicTextureManager();
@@ -347,9 +341,8 @@ int main( void )
 	
 	cMesh terrainMesh;
 	
-	//::g_pTheMouseCamera = new cMouseCamera( glm::vec3( 5.0f, 5.0f, 3.0f ) );
-	//::g_pTheMouseCamera = new cMouseCamera( glm::vec3( 5.0f, 5.0f, 3.0f ), glm::vec3( 0.0f, 0.0f, 1.0f ), -90.f, 0.f );
 	::g_pTheMouseCamera = new cMouseCamera( glm::vec3( 12.0f, 12.0f, 12.0f ), glm::vec3( 0.0f, 0.0f, 1.0f ), -135.f, -32.f );
+	//::g_pTheMouseCamera = new cMouseCamera( glm::vec3( 12.0f, 12.0f, 12.0f ), glm::vec3( 0.0f, 0.0f, 1.0f ), 0.0f, -32.f );
 
 	//std::cout << "Camera Pos: "
 	//	<< ::g_pTheMouseCamera->Position.x << ", "
@@ -367,6 +360,22 @@ int main( void )
 	::g_lastY = wConfig.height / 2.0f;
 
 	glEnable( GL_DEPTH );
+
+	if( ::g_vecGameObjects.size() > 0 )
+	{
+		for( int i = 0; i != ::g_vecGameObjects.size(); i++ )
+		{
+			if( ::g_vecGameObjects[i]->meshName == "ball" )
+			{
+				::g_selectedSphere = i;
+				::g_vecGameObjects[i]->textureBlend[0] = 0.0f;
+				::g_vecGameObjects[i]->textureBlend[1] = 1.0f;
+
+				::g_vecGameObjects[i]->rigidBody->GetPosition( ::prevPosition );
+				break;
+			}
+		}
+	}
 
 	// Gets the "current" time "tick" or "step"
 	double lastTimeStep = glfwGetTime();
@@ -415,19 +424,16 @@ int main( void )
 			// 0 
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D,
-				::g_pTextureManager->getTextureIDFromName("Rough_rock_014_COLOR.bmp"));
-				//::g_pTextureManager->getTextureIDFromName(pTheGO->textureNames[0]));
+				::g_pTextureManager->getTextureIDFromName("Rough_rock_014_COLOR.bmp"));				
 			// 1
 			glActiveTexture(GL_TEXTURE1);
 			glBindTexture(GL_TEXTURE_2D,
 				::g_pTextureManager->getTextureIDFromName("Rough_rock_015_COLOR.bmp"));
-				//::g_pTextureManager->getTextureIDFromName(pTheGO->textureNames[1]));
 			// 2..  and so on... 
 			glActiveTexture( GL_TEXTURE2 );
 			glBindTexture( GL_TEXTURE_2D,
 				::g_pTextureManager->getTextureIDFromName( "Red_Marble_001_COLOR.bmp" ) );
-			//::g_pTextureManager->getTextureIDFromName(pTheGO->textureNames[1]));
-
+			
 			// Set sampler in the shader
 			// NOTE: You shouldn't be doing this during the draw call...
 			GLint curShaderID = ::g_pShaderManager->getIDFromFriendlyName("mySexyShader");
@@ -473,9 +479,18 @@ int main( void )
 
 		std::map< unsigned long long, cAABBv2* >::iterator itAABB;
 
-		std::stringstream ssTitle;
-		ssTitle << "Physics 2: Project 1";
 
+		std::stringstream ssTitle;
+		ssTitle << "Physics 2: Project 1"
+			<< "Camera Position (xyz): "
+			<< ::g_pTheMouseCamera->Position.x << ", "
+			<< ::g_pTheMouseCamera->Position.y << ", "
+			<< ::g_pTheMouseCamera->Position.z
+			<< " - Yaw: "
+			<< ::g_pTheMouseCamera->Yaw
+			<< " - Pitch: "
+			<< ::g_pTheMouseCamera->Pitch;
+		
 		glfwSetWindowTitle( window, ssTitle.str().c_str() );
 
 		glfwSwapBuffers( window );
@@ -486,12 +501,61 @@ int main( void )
 		double curTime = glfwGetTime();
 		double deltaTime = curTime - lastTimeStep;
 
-		// Update camera
+		// Update camera from input
 		ProcessCameraInput( window, deltaTime );
+		
+		//// UpdateCamera
+		//{
+		//	if( g_selectedSphere != -1 )
+		//	{
+		//		glm::vec3 target;
+		//		::g_vecGameObjects[g_selectedSphere]->rigidBody->GetPosition( target );				
+		//		
+		//		// Calculate camera new position
+
+		//		
+		//		// Calculate camera Pitch
+		//		glm::vec3 pitchRef; 
+		//		pitchRef.x = target.x;
+		//		pitchRef.y = target.y;
+		//		pitchRef.z = ::g_pTheMouseCamera->Position.z;
+
+		//		glm::vec3 da = glm::normalize( pitchRef - ::g_pTheMouseCamera->Position );
+		//		glm::vec3 db = glm::normalize( target - ::g_pTheMouseCamera->Position );
+		//		float cos =  glm::acos( glm::dot( da, db ) );
+		//		cos *= -1;
+		//		::g_pTheMouseCamera->Pitch = glm::degrees( cos );
+
+		//		// Calculate camera Yaw
+		//		glm::vec3 yawRef;
+		//		yawRef.x = prevPosition.x;
+		//		yawRef.y = prevPosition.y;
+		//		yawRef.z = ::g_pTheMouseCamera->Position.z;
+
+		//		glm::vec3 yawRef2;
+		//		yawRef2.x = target.x;
+		//		yawRef2.y = target.y;
+		//		yawRef2.z = ::g_pTheMouseCamera->Position.z;
+
+		//		if( yawRef != yawRef2 )
+		//		{
+		//			da = glm::normalize( yawRef - ::g_pTheMouseCamera->Position );
+		//			db = glm::normalize( yawRef2 - ::g_pTheMouseCamera->Position );
+		//			cos = glm::acos( glm::dot( da, db ) );
+		//			//cos *= -1;
+
+		//			::g_pTheMouseCamera->Yaw = ( glm::degrees( cos ) - 135.0f );
+		//		}
+
+		//		::g_pTheMouseCamera->updateCameraVectors();
+
+		//		
+		//		prevPosition = target;
+		//	}
+		//}
 
 		// Physics Calculation
-		//PhysicsStep( deltaTime );
-		::g_pThePhysicsWorld->TimeStep( deltaTime );
+		::g_pThePhysicsWorld->TimeStep( ( float )deltaTime );
 		
 		lastTimeStep = curTime;
 
@@ -613,92 +677,69 @@ void loadObjectsFile( std::string fileName )
 
 	for( int index = 0; index != allObjects.size(); index++ )
 	{
-		// Check, Number of Objects must be at least 1
-		if( allObjects[index].nObjects == 0 ) allObjects[index].nObjects = 1;
+		// Create a new GO
+		cGameObject* pTempGO = new cGameObject();
 
-		// Create the number of gameObjects specified in the file for each line 
-		for( int i = 0; i != allObjects[index].nObjects; i++ )
+		// Set the GO Mesh
+		pTempGO->meshName = allObjects[index].meshname;
+		pTempGO->scale = allObjects[index].scale;
+
+		// Create a new RigidBody
+		nPhysics::iRigidBody* newBody = NULL;
+
+		// Create a RigidBody Description
+		nPhysics::sRigidBodyDesc theDesc;			
+
+		theDesc.Position.x = allObjects[index].x;
+		theDesc.Position.y = allObjects[index].y;
+		theDesc.Position.z = allObjects[index].z;		
+		theDesc.Mass	   = allObjects[index].mass;
+
+		if( theDesc.Mass == 0.0f )
+			theDesc.invMass = theDesc.Mass;
+		else
+			theDesc.invMass = 1 / theDesc.Mass;
+
+		theDesc.PrevPosition = theDesc.Position;
+
+		if( pTempGO->meshName == "ball" )
 		{
-			// Create a new GO
-			cGameObject* pTempGO = new cGameObject();
+			pTempGO->textureBlend[0] = 1.0f;
+			pTempGO->textureNames[0] = "Rough_rock_015_COLOR.bmp";
+			pTempGO->textureBlend[1] = 0.0f;
+			pTempGO->textureNames[1] = "Red_Marble_001_COLOR.bmp";
 
-			// Set the GO Mesh
-			pTempGO->meshName = allObjects[index].meshname;
-
-			// Create a new RigidBody
-			//nPhysics::iRigidBody* newBody = CreateRigidBody();
-			nPhysics::iRigidBody* newBody = NULL;
-
-			// Create a RigidBody Description
-			nPhysics::sRigidBodyDesc theDesc;			
-
-			// SOME OBJECTS ARE RANDOMLY PLACED WHEN RANDOM=TRUE ON FILE
-			if( allObjects[index].random == "true" )
-			{
-				theDesc.Position.x = generateRandomNumber( -allObjects[index].rangeX, allObjects[index].rangeX );
-				theDesc.Position.y = generateRandomNumber( -allObjects[index].rangeY, allObjects[index].rangeY );
-				theDesc.Position.z = generateRandomNumber( -allObjects[index].rangeZ, allObjects[index].rangeZ );
-				pTempGO->scale = allObjects[index].rangeScale;
-			}
-			else
-			{   // position and scale are fixed
-				theDesc.Position.x = allObjects[index].x;
-				theDesc.Position.y = allObjects[index].y;
-				theDesc.Position.z = allObjects[index].z;
-				pTempGO->scale = allObjects[index].scale;
-			}
-
-			theDesc.PrevPosition = theDesc.Position;
-
-			//theDesc.Velocity.x = generateRandomNumber( -1.1f, 1.1f );
-			//theDesc.Velocity.y = generateRandomNumber( -1.1f, 1.1f );
-			//theDesc.Velocity.z = 0.0f;
-
-			if( pTempGO->meshName == "ball" )
-			{
-				pTempGO->textureBlend[0] = 1.0f;
-				pTempGO->textureNames[0] = "Rough_rock_015_COLOR.bmp";
-				pTempGO->textureBlend[1] = 0.0f;
-				pTempGO->textureNames[1] = "Red_Marble_001_COLOR.bmp";
-
-				cMesh tempMesh;
-				::g_pVAOManager->lookupMeshFromName( "ball", tempMesh );
-				float radius = tempMesh.maxExtent / 2 * pTempGO->scale;
-
-				theDesc.Mass = allObjects[index].scale;
-				theDesc.invMass = theDesc.Mass;
-
-				newBody = ::g_pThePhysicsFactory->CreateRigidBody( theDesc, ::g_pThePhysicsFactory->CreateSphere( radius ) );
-			}
-			else
-			{
-				pTempGO->textureBlend[0] = 1.0f;
-				pTempGO->textureNames[0] = "Rough_rock_014_COLOR.bmp";
-
-				cMesh tempMesh;
-				::g_pVAOManager->lookupMeshFromName( pTempGO->meshName, tempMesh );
-
-				glm::vec3 planeNormal = glm::vec3( tempMesh.pVertices[tempMesh.pTriangles[0].vertex_ID_0].nx,
-												   tempMesh.pVertices[tempMesh.pTriangles[0].vertex_ID_0].ny,
-												   tempMesh.pVertices[tempMesh.pTriangles[0].vertex_ID_0].nz );
-
-				planeNormal = glm::normalize( planeNormal );
-				planeNormal *= glm::vec3( -1.0, -1.0, -1.0 );
-
-				float planeConst = glm::dot( theDesc.Position, planeNormal );
-
-				theDesc.Mass = 0.0f;
-				theDesc.invMass = 0.0f;
-
-				newBody = ::g_pThePhysicsFactory->CreateRigidBody( theDesc, g_pThePhysicsFactory->CreatePlane( planeNormal, planeConst ) );
-			}
-
-			::g_pThePhysicsWorld->AddRigidBody( newBody );
+			cMesh tempMesh;
+			::g_pVAOManager->lookupMeshFromName( "ball", tempMesh );
+			float radius = tempMesh.maxExtent / 2 * pTempGO->scale;
 			
-			pTempGO->rigidBody = newBody;
-
-			::g_vecGameObjects.push_back( pTempGO );
+			newBody = ::g_pThePhysicsFactory->CreateRigidBody( theDesc, ::g_pThePhysicsFactory->CreateSphere( radius ) );
 		}
+		else
+		{
+			pTempGO->textureBlend[0] = 1.0f;
+			pTempGO->textureNames[0] = "Rough_rock_014_COLOR.bmp";
+
+			cMesh tempMesh;
+			::g_pVAOManager->lookupMeshFromName( pTempGO->meshName, tempMesh );
+
+			glm::vec3 planeNormal = glm::vec3( tempMesh.pVertices[tempMesh.pTriangles[0].vertex_ID_0].nx,
+												tempMesh.pVertices[tempMesh.pTriangles[0].vertex_ID_0].ny,
+												tempMesh.pVertices[tempMesh.pTriangles[0].vertex_ID_0].nz );
+
+			planeNormal = glm::normalize( planeNormal );
+			planeNormal *= glm::vec3( -1.0, -1.0, -1.0 );
+
+			float planeConst = glm::dot( theDesc.Position, planeNormal );
+
+			newBody = ::g_pThePhysicsFactory->CreateRigidBody( theDesc, g_pThePhysicsFactory->CreatePlane( planeNormal, planeConst ) );
+		}
+
+		::g_pThePhysicsWorld->AddRigidBody( newBody );
+			
+		pTempGO->rigidBody = newBody;
+
+		::g_vecGameObjects.push_back( pTempGO );
 	}
 }
 
@@ -708,12 +749,12 @@ sGOparameters parseObjLine( std::ifstream &source ) {
 	sGOparameters sGOpar;
 
 	//Scanning a line from the file
-	source >> sGOpar.meshname >> sGOpar.nObjects
-		>> sGOpar.x >> sGOpar.y >> sGOpar.z >> sGOpar.scale
-		>> sGOpar.random
-		>> sGOpar.rangeX >> sGOpar.rangeY >> sGOpar.rangeZ
-		>> sGOpar.rangeScale;
-
+	source >> sGOpar.meshname 
+		>> sGOpar.x 
+		>> sGOpar.y 
+		>> sGOpar.z 
+		>> sGOpar.scale
+		>> sGOpar.mass;
 
 	return sGOpar;
 }
@@ -798,10 +839,8 @@ void DrawObject( cGameObject* pTheGO )
 	glm::vec3 position;
 	pTheGO->rigidBody->GetPosition( position );
 
-	glm::quat qOrientation;
-	//pTheGO->rigidBody->GetRotation( qOrientation );
-	
-	
+	//glm::quat qOrientation;
+	//pTheGO->rigidBody->GetRotation( qOrientation );	
 
 	// 'model' or 'world' matrix
 	glm::mat4x4 mModel = glm::mat4x4( 1.0f );	//		mat4x4_identity(m);
@@ -858,40 +897,29 @@ void DrawObject( cGameObject* pTheGO )
 	glActiveTexture( texture00Unit + GL_TEXTURE0 );		// GL_TEXTURE0 = 33984
 	glBindTexture( GL_TEXTURE_2D, texture00Number );
 
-	// 0 
 	glActiveTexture( GL_TEXTURE0 );
 	glBindTexture( GL_TEXTURE_2D,
 		::g_pTextureManager->getTextureIDFromName( pTheGO->textureNames[0] ) );
-	// 1
+	
 	glActiveTexture( GL_TEXTURE1 );
 	glBindTexture( GL_TEXTURE_2D,
 		::g_pTextureManager->getTextureIDFromName( pTheGO->textureNames[1] ) );
-	// 2..  and so on... 
 
 	// Set sampler in the shader
-	// NOTE: You shouldn't be doing this during the draw call...
 	GLint curShaderID = ::g_pShaderManager->getIDFromFriendlyName( "mySexyShader" );
 	GLint textSampler00_ID = glGetUniformLocation( curShaderID, "myAmazingTexture00" );
 	GLint textSampler01_ID = glGetUniformLocation( curShaderID, "myAmazingTexture01" );
-	//// And so on (up to 10, or whatever number of textures)... 
-
+	
 	GLint textBlend00_ID = glGetUniformLocation( curShaderID, "textureBlend00" );
 	GLint textBlend01_ID = glGetUniformLocation( curShaderID, "textureBlend01" );
-
-	//// This connects the texture sampler to the texture units... 
-	//glUniform1i( textSampler00_ID, 0  );		// Enterprise
-	//glUniform1i( textSampler01_ID, 1  );		// GuysOnSharkUnicorn
-	// .. and so on
 
 	// And the blending values
 	glUniform1f( textBlend00_ID, pTheGO->textureBlend[0] );
 	glUniform1f( textBlend01_ID, pTheGO->textureBlend[1] );
-	// And so on...
 	
 	if( bIsWireframe )
 	{
 		glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );	// Default
-//		glEnable(GL_DEPTH_TEST);		// Test for z and store in z buffer
 		glDisable( GL_CULL_FACE );
 	}
 	else
@@ -921,45 +949,41 @@ void mouse_callback( GLFWwindow* window, double xpos, double ypos )
 {
 	if( ::g_firstMouse )
 	{
-		::g_lastX = xpos;
-		::g_lastY = ypos;
+		::g_lastX = ( float )xpos;
+		::g_lastY = ( float )ypos;
 		::g_firstMouse = false;
 	}
 
-	//float xoffset = xpos - ::g_lastX;
-	//float yoffset = ::g_lastY - ypos; // reversed since y-coordinates go from bottom to top
-	float xoffset = ::g_lastX - xpos;
-	float yoffset = ::g_lastY - ypos; // reversed since y-coordinates go from bottom to top
+	float xoffset = ::g_lastX - ( float )xpos;
+	float yoffset = ::g_lastY - ( float )ypos; // reversed since y-coordinates go from bottom to top
 
-	::g_lastX = xpos;
-	::g_lastY = ypos;
+	::g_lastX = ( float )xpos;
+	::g_lastY = ( float )ypos;
 
 	::g_pTheMouseCamera->ProcessMouseMovement( xoffset, yoffset );
-
-	//std::cout << "Mouse Position: " << xpos << ", " << ypos << " Offset: " << xoffset << ", " << yoffset << std::endl;
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
 void scroll_callback( GLFWwindow* window, double xoffset, double yoffset )
 {
-	::g_pTheMouseCamera->ProcessMouseScroll( yoffset );
+	::g_pTheMouseCamera->ProcessMouseScroll( ( float )yoffset );
 }
 
-void printCameraDetails()
-{
-	std::cout << "Camera Pos: "
-		<< ::g_pTheMouseCamera->Position.x << ", "
-		<< ::g_pTheMouseCamera->Position.y << ", "
-		<< ::g_pTheMouseCamera->Position.z
-		<< " | WorldUp: "
-		<< ::g_pTheMouseCamera->WorldUp.x << ", "
-		<< ::g_pTheMouseCamera->WorldUp.y << ", "
-		<< ::g_pTheMouseCamera->WorldUp.z
-		<< " | Yaw: " << ::g_pTheMouseCamera->Yaw
-		<< " | Pitch: " << ::g_pTheMouseCamera->Pitch
-		<< std::endl;
-}
+//void printCameraDetails()
+//{
+//	std::cout << "Camera Pos: "
+//		<< ::g_pTheMouseCamera->Position.x << ", "
+//		<< ::g_pTheMouseCamera->Position.y << ", "
+//		<< ::g_pTheMouseCamera->Position.z
+//		<< " | WorldUp: "
+//		<< ::g_pTheMouseCamera->WorldUp.x << ", "
+//		<< ::g_pTheMouseCamera->WorldUp.y << ", "
+//		<< ::g_pTheMouseCamera->WorldUp.z
+//		<< " | Yaw: " << ::g_pTheMouseCamera->Yaw
+//		<< " | Pitch: " << ::g_pTheMouseCamera->Pitch
+//		<< std::endl;
+//}
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
@@ -969,15 +993,15 @@ void ProcessCameraInput( GLFWwindow *window, double deltaTime )
 		glfwSetWindowShouldClose( window, true );
 
 	if( glfwGetKey( window, GLFW_KEY_W ) == GLFW_PRESS )
-		::g_pTheMouseCamera->ProcessKeyboard( FORWARD, deltaTime );
+		::g_pTheMouseCamera->ProcessKeyboard( FORWARD, ( float )deltaTime );
 	if( glfwGetKey( window, GLFW_KEY_S ) == GLFW_PRESS )
-		::g_pTheMouseCamera->ProcessKeyboard( BACKWARD, deltaTime );
+		::g_pTheMouseCamera->ProcessKeyboard( BACKWARD, ( float )deltaTime );
 	if( glfwGetKey( window, GLFW_KEY_A ) == GLFW_PRESS )
-		::g_pTheMouseCamera->ProcessKeyboard( LEFT, deltaTime );
+		::g_pTheMouseCamera->ProcessKeyboard( LEFT, ( float )deltaTime );
 	if( glfwGetKey( window, GLFW_KEY_D ) == GLFW_PRESS )
-		::g_pTheMouseCamera->ProcessKeyboard( RIGHT, deltaTime );
+		::g_pTheMouseCamera->ProcessKeyboard( RIGHT, ( float )deltaTime );
 	if( glfwGetKey( window, GLFW_KEY_Q ) == GLFW_PRESS )
-		::g_pTheMouseCamera->ProcessKeyboard( UP, deltaTime );
+		::g_pTheMouseCamera->ProcessKeyboard( UP, ( float )deltaTime );
 	if( glfwGetKey( window, GLFW_KEY_E ) == GLFW_PRESS )
-		::g_pTheMouseCamera->ProcessKeyboard( DOWN, deltaTime );
+		::g_pTheMouseCamera->ProcessKeyboard( DOWN, ( float )deltaTime );
 }
